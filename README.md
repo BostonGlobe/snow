@@ -1,3 +1,5 @@
 # snow
 
-- `make all year=<YYYY> month=<MM> day=<DD>` - download latest *snow.tif* and color correctly
+#### Download latest *snow.tif* and color correctly:
+
+- `make all year=<YYYY> month=<MM> day=<DD>`
