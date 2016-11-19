@@ -2,7 +2,8 @@
 
 #### Sources:
 
-- http://www.nohrsc.noaa.gov/snowfall/
+- http://www.nohrsc.noaa.gov/snowfall/ *(snow.tif)*
+- http://www.nohrsc.noaa.gov/nsa/reports.html *(snow station reports)*
 
 #### Download latest *snow.tif* and color correctly:
 
