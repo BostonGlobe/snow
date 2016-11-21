@@ -9,7 +9,8 @@ download:
 
 color:
 
-	gdaldem color-relief tmp/snow.tif color_ramp.txt tmp/output.tif -alpha;
+	gdalwarp -te -83 24 -66 50 tmp/snow.tif tmp/clipped_snow.tif;
+	gdaldem color-relief tmp/clipped_snow.tif color_ramp.txt tmp/output.tif -alpha;
 	convert tmp/output.tif tmp/output.png;
 
 all: clean download color
