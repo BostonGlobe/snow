@@ -1,0 +1,16 @@
+{
+	"title": "Graphic title",
+	"author": "",
+	"description": "Description of graphic",
+	"keywords": "Comma, delimited, for, seo",
+	"url": "//apps.bostonglobe.com/graphics/path/to/graphic",
+	"imageUrl": "//apps.bostonglobe.com/graphics/path/to/image",
+	"section": "Metro",
+	"sectionUrl": "//bostonglobe.com/metro",
+	"credits": "",
+	"teasers": [],
+	"social": true,
+	"meter": true,
+	"socialConnect": true,
+	"ads": false
+}
