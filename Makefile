@@ -1,20 +1,25 @@
+clean_all:
+
+	make clean dir=input
+	make clean dir=output
+
 clean:
 
-	rm -rf tmp;
-	mkdir tmp;
+	rm -rf ${dir};
+	mkdir ${dir};
 
 download:
 
-	curl 'http://www.nohrsc.noaa.gov/snowfall/data/${year}${month}/snfl_b2_${year}${month}${day}12_R150_L30_G0.20.tif' > tmp/snow.tif;
+	curl 'http://www.nohrsc.noaa.gov/snowfall/data/${year}${month}/snfl_b2_${year}${month}${day}12_R150_L30_G0.20.tif' > input/snow.tif;
 
-color:
+to_shapefile:
 
-	gdalwarp -te -83 24 -66 50 tmp/snow.tif tmp/clipped_snow.tif;
-	gdaldem color-relief tmp/snow.tif color_ramp.txt tmp/output.tif -alpha;
-	convert tmp/output.tif tmp/output.png;
+	gdal_polygonize.py input/snow.tif -f "GeoJSON" output/snow.geojson;
 
-shapefile:
+to_topojson:
 
-	gdal_polygonize.py tmp/snow.tif -f "ESRI Shapefile" tmp/snow.shp;
+	geo2topo output/snow.geojson | \
+		toposimplify \
+		> output/snow.topojson
 
-all: clean download color
+all: clean_all download to_shapefile to_topojson
