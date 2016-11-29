@@ -14,12 +14,19 @@ download:
 
 to_shapefile:
 
-	gdal_polygonize.py input/snow.tif -f "GeoJSON" output/snow.geojson;
+	gdal_polygonize.py input/snow.tif -f "ESRI Shapefile" output/snow.shp;
+	ogr2ogr -where 'DN >= 0' -f "GeoJSON" output/snow.geojson output/snow.shp;
 
 to_topojson:
 
 	geo2topo output/snow.geojson | \
 		toposimplify \
-		> output/snow.topojson
+		> output/snow.json
 
-all: clean_all download to_shapefile to_topojson
+color:
+
+	gdaldem color-relief input/snow.tif color_ramp_default.txt output/output.tif -alpha;
+	convert output/output.tif output/output.png;
+
+all: clean_all download to_shapefile to_topojson color
+
