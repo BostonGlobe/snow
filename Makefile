@@ -14,14 +14,14 @@ download:
 
 preprocess:
 
-	gdal_calc.py -A input/snow.tif --outfile=output/snow.tif \
-		--calc="(A+1)*(A>=0.1)" --NoDataValue=0
+	gdal_calc.py -A input/snow.tif --outfile=output/temp.tif --calc="(A+1)*(A>0)" --NoDataValue=0;
+	gdal_calc.py -A output/temp.tif --outfile=output/snow.tif --calc="(A+1)*(A>=1.1) + (A)*(A<1.1)";
 
 to_shapefile:
 
 	gdal_polygonize.py output/snow.tif -f "ESRI Shapefile" output/snow.shp;
 	# python ~/Desktop/gdal_polygonize.py input/snow.tif -f "ESRI Shapefile" -p output/snow.shp;
-	ogr2ogr -where 'DN >= 0' -f "GeoJSON" output/snow.geojson output/snow.shp;
+	ogr2ogr -f "GeoJSON" output/snow.geojson output/snow.shp;
 
 to_topojson:
 
@@ -41,17 +41,4 @@ test:
 	make preprocess
 	make to_shapefile
 	make to_topojson
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	# make color
