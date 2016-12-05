@@ -4,6 +4,10 @@ This project was generated with [slush-globeapp](https://github.com/BostonGlobe/
 
 Please note: do not reproduce Boston Globe logos or fonts without written permission.
 
+## Create snow image
+
+- `make all year=<YYYY> month=<MM> day=<DD>` (will generate `tmp/output.png`).
+
 ## Setup
 Clone repo and run `yarn`.
 
