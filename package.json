@@ -12,6 +12,7 @@
     "babel-register": "6.9.0",
     "browser-sync": "2.13.0",
     "cheerio": "0.20.0",
+    "d3": "^4.4.0",
     "del": "2.2.0",
     "dsv-loader": "1.0.3",
     "fontfaceobserver": "2.0.5",
@@ -39,6 +40,7 @@
     "require-dir": "0.3.0",
     "run-sequence": "1.2.1",
     "shelljs": "0.7.0",
+    "topojson-client": "^2.1.0",
     "webpack": "1.13.1",
     "webpack-stream": "3.2.0",
     "yargs": "4.7.1"
