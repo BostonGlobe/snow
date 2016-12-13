@@ -6,7 +6,7 @@ removeMobileHover()
 setPathCookie()
 
 // Add class to html if JS is loaded
-document.querySelector('html').classList.add('has-loaded')
+document.querySelector('html').classList.add('js-is-loaded')
 
 // Wire header social if present
 if (document.querySelectorAll('.g-header__share').length) {
@@ -15,5 +15,3 @@ if (document.querySelectorAll('.g-header__share').length) {
 		twitter: '.g-header__share-button--tw',
 	})
 }
-
-import main from './main.js'
