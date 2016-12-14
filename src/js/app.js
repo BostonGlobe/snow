@@ -2,6 +2,8 @@ import setPathCookie from './utils/setPathCookie.js'
 import removeMobileHover from './utils/removeMobileHover.js'
 import wireSocialButtons from './utils/wireSocialButtons.js'
 
+import map from './map.js'
+
 removeMobileHover()
 setPathCookie()
 
@@ -15,3 +17,5 @@ if (document.querySelectorAll('.g-header__share').length) {
 		twitter: '.g-header__share-button--tw',
 	})
 }
+
+map.init()
