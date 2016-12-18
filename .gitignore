@@ -3,3 +3,5 @@ dist
 .tmp
 data/copy.json
 src/assets/methode/*.jpg
+input
+output

@@ -10,7 +10,8 @@ clean:
 
 download:
 
-	curl 'http://www.nohrsc.noaa.gov/snowfall/data/${year}${month}/snfl_b2_${year}${month}${day}12_R150_L30_G0.20.tif' > input/snow.tif;
+	# curl 'http://www.nohrsc.noaa.gov/snowfall/data/${year}${month}/snfl_b2_${year}${month}${day}12_R150_L30_G0.20.tif' > input/snow.tif;
+	curl 'http://www.nohrsc.noaa.gov/snowfall/data/201612/snfl_2016093012_to_2016121512.tif' > input/snow.tif;
 
 preprocess:
 
@@ -20,21 +21,24 @@ preprocess:
 to_shapefile:
 
 	gdal_polygonize.py output/snow.tif -f "ESRI Shapefile" output/snow.shp;
-	# python ~/Desktop/gdal_polygonize.py input/snow.tif -f "ESRI Shapefile" -p output/snow.shp;
 	ogr2ogr -f "GeoJSON" output/snow.geojson output/snow.shp;
+	cp output/snow.geojson src/assets/snow.geojson;
 
-to_topojson:
+# to_topojson:
 
-	geo2topo output/snow.geojson | \
-		toposimplify \
-		> output/snow.json
+# 	geo2topo output/snow.geojson | \
+# 		toposimplify \
+# 		> output/snow.json
 
 color:
 
-	gdaldem color-relief output/snow.tif color_ramp_default.txt output/output.tif -alpha;
-	convert output/output.tif output/output.png;
+	# gdaldem color-relief output/snow.tif data/color_ramp_default.txt output/output.tif -alpha;
+	gdaldem color-relief input/snow.tif data/color_ramp_season.txt output/input-colored.tif -alpha;
+	convert output/input-colored.tif output/input-colored.png;
 
-all: clean_all download preprocess to_shapefile to_topojson color
+# all: clean_all download preprocess to_shapefile to_topojson color
+# all: clean_all download preprocess to_shapefile color
+all: clean_all download color
 
 test:
 	make clean dir=output
