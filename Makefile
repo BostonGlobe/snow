@@ -38,7 +38,7 @@ presimplify:
 	# Simplify the shapefile by using a threshold scale
 	shp2json output/snowtotals.shp | \
 	ndjson-split 'd.features' | \
-	ndjson-map -r d3 'd.properties.DN = d3.scaleThreshold().domain([0*1000,0.001*1000,0.1*1000,1*1000,2*1000,3*1000,4*1000,6*1000,8*1000,10*1000,12*1000,15*1000,18*1000,21*1000,24*1000,30*1000,36*1000]).range([0,0,0.001,0.1,1,2,3,4,6,8,10,12,15,18,21,24,30,36])(d.properties.DN), d' | \
+	ndjson-map -r d3 'd.properties.DN = d3.scaleThreshold().domain([0*1000,0.001*1000,0.1*1000,1*1000,2*1000,3*1000,4*1000,6*1000,8*1000,10*1000,12*1000,15*1000,18*1000,21*1000,24*1000,30*1000,36*1000]).range([0,0.001,0.1,1,2,3,4,6,8,10,12,15,18,21,24,30,36])(d.properties.DN), d' | \
 	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", features: []}' | \
 	geo2topo | \
 	topomerge snowtotals=- -f 'd.properties.DN > 0' -k 'd.properties.DN' | \
@@ -73,3 +73,7 @@ post:
 	make presimplify
 	make topojsonize
 	make color
+
+post-lite:
+	make presimplify
+	make topojsonize
