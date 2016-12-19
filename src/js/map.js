@@ -9,8 +9,8 @@ const map = {
 
 		// Create Mapzen map in map container
 		const map = L.Mapzen.map(mapElement, {
-			center: [48.5326, -123.0879],
-			zoom: 11,
+			center: [37, -97],
+			zoom: 3.75,
 			// scene: L.Mapzen.BasemapStyles.Refill,
 			scene: 'assets/scene.yaml',
 		})

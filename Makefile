@@ -54,8 +54,8 @@ topojsonize:
 
 	# Convert GeoJSON to TopoJSON
 	geo2topo output/snowtotals.geojson | \
-		toposimplify -s 0.0000002 -f > output/snowtotals-topo.json; \
-		cp output/snowtotals-topo.json src/assets/snowtotals-topo.json;
+		toposimplify -s 0.0000002 -f > output/snowtotals.topojson; \
+		cp output/snowtotals.topojson src/assets/snowtotals.topojson;
 
 
 
