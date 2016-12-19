@@ -14,12 +14,14 @@ clean:
 
 download:
 
+	# Download specified day's 24 hours of snowfall
 	curl 'http://www.nohrsc.noaa.gov/snowfall/data/${year}${month}/snfl_b2_${year}${month}${day}12_R150_L30_G0.20.tif' > input/snow.tif;
 
 
 
 preprocess:
 
+	# Use raster arithmetic to 'promote' less-than-1 values to their own integer
 	gdal_calc.py -A input/snow.tif --outfile=output/temp.tif --calc="(A+1)*(A>0)" --NoDataValue=0;
 	gdal_calc.py -A output/temp.tif --outfile=output/integered.tif --calc="(A+1)*(A>=1.1) + (A)*(A<1.1)";
 
@@ -40,10 +42,19 @@ preprocess:
 
 
 
-to_shapefile:
+polygonize:
 
+	# Polygonize the raster tif
 	gdal_polygonize.py output/integered.tif -f "ESRI Shapefile" output/snowtotals.shp;
 	ogr2ogr -f "GeoJSON" output/snowtotals.geojson output/snowtotals.shp;
+
+
+
+topojsonize:
+
+	# Convert GeoJSON to TopoJSON
+	geo2topo output/snowtotals.geojson | \
+		toposimplify -s 0.0000002 -f > output/snowtotals-topo.json;
 
 
 
@@ -59,7 +70,7 @@ color:
 
 
 
-all: clean_all download preprocess to_shapefile color
+all: clean_all download preprocess polygonize topojsonize color
 
 
 
@@ -70,5 +81,5 @@ testA: clean_all download
 testB:
 	make clean dir=output
 	make preprocess
-	make to_shapefile
+	make polygonize
 	make color
