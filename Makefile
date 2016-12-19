@@ -25,6 +25,9 @@ preprocess:
 	gdal_calc.py -A input/snow.tif --outfile=output/temp.tif --calc="(A+1)*(A>0)" --NoDataValue=0;
 	gdal_calc.py -A output/temp.tif --outfile=output/integered.tif --calc="(A+1)*(A>=1.1) + (A)*(A<1.1)";
 
+	# gdal_calc.py -A input/snow.tif --outfile=output/integered.tif --calc="(A*1000)";
+
+
 	# original              first pass                             second pass
 	# ------------------------------------------------------------------------
 	#        0             (A+1)*(A>0)            (A+1)*(A>=1.1) + (A)*(A<1.1)
@@ -50,14 +53,30 @@ polygonize:
 
 
 
+	# # Convert GeoJSON to TopoJSON
+	# geo2topo output/snowtotals.geojson | \
+	# 	toposimplify -s 0.0000001 -f > output/snowtotals.topojson; \
+	# 	cp output/snowtotals.topojson src/assets/snowtotals.topojson;
+	# ndjson-split 'd.features' > test.ndjson;
+	# ndjson-map 'd.DN = d.DN / 1000' \
+
+# topomerge states=counties -k 'd.id.slice(0, 2)' < us-counties.json > us-states.json
+
 topojsonize:
 
-	# Convert GeoJSON to TopoJSON
-	geo2topo output/snowtotals.geojson | \
-		toposimplify -s 0.0000002 -f > output/snowtotals.topojson; \
-		cp output/snowtotals.topojson src/assets/snowtotals.topojson;
+	shp2json output/snowtotals.shp | \
+	ndjson-split 'd.features' | \
+	ndjson-map 'd.properties.name = "gabriel", d' | \
+	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", features: []}' | \
+	geo2topo | \
+	topomerge mass=- -k 'd.properties.name' | \
+	topo2geo mass=mass.geojson;
 
 
+no:
+	> output/final-topo.json;
+
+	geo2topo > output/final-topo.json;
 
 color:
 
@@ -83,4 +102,4 @@ testB:
 	make clean dir=output
 	make preprocess
 	make polygonize
-	make color
+	# make color
