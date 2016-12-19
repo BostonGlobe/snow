@@ -44,6 +44,8 @@ presimplify:
 	topomerge snowtotals=- -f 'd.properties.DN > 0' -k 'd.properties.DN' | \
 	topo2geo snowtotals=output/snowtotals.geojson;
 
+
+
 topojsonize:
 
 	# Topojsonize and simplify the GeoJSON
@@ -59,6 +61,7 @@ deploy:
 	cp output/snowtotals.topojson src/assets/snowtotals.topojson
 
 
+
 color:
 
 	# Color with pre-integer palette
@@ -69,7 +72,11 @@ color:
 
 all: clean_all download preprocess polygonize presimplify topojsonize color
 
+
+
 pre: clean_all download
+
+
 
 post:
 	make clean dir=output
@@ -78,6 +85,8 @@ post:
 	make presimplify
 	make topojsonize
 	make color
+
+
 
 post-lite:
 	make presimplify

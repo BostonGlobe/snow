@@ -13,7 +13,7 @@ layers:
       draw:
         lines:
           order: global.sdk_order_under_roads_0
-          width: [[3, 0.25px], [10, 1px]]
+          width: [[1, 0.25px], [10, 1px]]
           color: |
             function() {
 

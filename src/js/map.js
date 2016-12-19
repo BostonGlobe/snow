@@ -15,6 +15,8 @@ const map = {
 			scene: 'assets/scene.yaml',
 		})
 
+		map.attributionControl.addAttribution('Snowfall analysis <a href="https://www.nohrsc.noaa.gov/snowfall/">NOHRSC</a>');
+
 		// Add geocoder
 		const geocoder = L.Mapzen.geocoder('mapzen-JA21Wes')
 		geocoder.addTo(map)
