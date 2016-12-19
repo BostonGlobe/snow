@@ -1,7 +1,6 @@
 import setPathCookie from './utils/setPathCookie.js'
 import removeMobileHover from './utils/removeMobileHover.js'
 import wireSocialButtons from './utils/wireSocialButtons.js'
-
 import map from './map.js'
 
 removeMobileHover()

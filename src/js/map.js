@@ -2,31 +2,31 @@ import { select } from './utils/dom.js'
 
 const map = {
 
-  init() {
+	init() {
 
-    // Select DOM map container
-    const mapElement = select('.observed-snowfall--map')
+		// Select DOM map container
+		const mapElement = select('.observed-snowfall--map')
 
-    // Create Mapzen map in map container
-    const map = L.Mapzen.map(mapElement, {
-    	center: [37.7749, -122.4194],
-    	zoom: 13,
-    	scene: L.Mapzen.BasemapStyles.Refill,
-    })
+		// Create Mapzen map in map container
+		const map = L.Mapzen.map(mapElement, {
+			center: [48.5326, -123.0879],
+			zoom: 11,
+			// scene: L.Mapzen.BasemapStyles.Refill,
+			scene: 'assets/scene.yaml',
+		})
 
-    // Add geocoder
-    const geocoder = L.Mapzen.geocoder('mapzen-JA21Wes')
-    geocoder.setPosition('topright')
-    geocoder.addTo(map)
+		// Add geocoder
+		const geocoder = L.Mapzen.geocoder('mapzen-JA21Wes')
+		geocoder.addTo(map)
 
-    // Add locator button
-    const locator = L.Mapzen.locator()
-    locator.addTo(map)
+		// Add locator button
+		const locator = L.Mapzen.locator()
+		locator.addTo(map)
 
-    // Keep track of map location in URL hash
-    L.Mapzen.hash({ map, geocoder })
+		// Keep track of map location in URL hash
+		L.Mapzen.hash({ map, geocoder })
 
-  }
+	}
 
 }
 
