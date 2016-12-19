@@ -11,58 +11,32 @@ layers:
     snowtotals:
       data: { source: snowtotals }
       draw:
-        lines:
-          order: global.sdk_order_under_roads_0
-          color: red
-          width: 1px
         polygons:
           order: global.sdk_order_under_roads_0
-          color: blue
+          color: |
+            function() {
 
-# sources:
+              var DN = feature.DN
 
+              var color =
+                DN >= 38 ? 'rgb(255, 255, 000)' :
+                DN >= 32 ? 'rgb(255, 127, 000)' :
+                DN >= 26 ? 'rgb(238, 064, 000)' :
+                DN >= 23 ? 'rgb(205, 000, 000)' :
+                DN >= 20 ? 'rgb(139, 000, 000)' :
+                DN >= 17 ? 'rgb(139, 000, 139)' :
+                DN >= 14 ? 'rgb(145, 044, 238)' :
+                DN >= 12 ? 'rgb(200, 104, 255)' :
+                DN >= 10 ? 'rgb(000, 238, 238)' :
+                DN >= 8  ? 'rgb(000, 178, 238)' :
+                DN >= 6  ? 'rgb(030, 144, 255)' :
+                DN >= 5  ? 'rgb(016, 078, 139)' :
+                DN >= 4  ? 'rgb(000, 139, 000)' :
+                DN >= 3  ? 'rgb(000, 205, 000)' :
+                DN >= 2  ? 'rgb(170, 255, 127)' :
+                DN >= 1  ? 'rgb(234, 255, 191)' :
+                'rgba(255, 255, 255, 0)';
 
-# layers:
+              return color;
 
-#   snowtotals:
-#     data: { source: snowtotals }
-#     draw:
-
-#       lines:
-#         color: |
-#           function() {
-#             console.log('asdf')
-#           }
-#         order: global.sdk_order_under_roads_0
-
-
-      # polygons:
-      #   color: |
-      #     function() {
-
-      #       console.log('hey')
-
-      #       var DN = feature.properties.DN
-
-      #       var color =
-      #         DN >= 38 ? 'rgb(255, 255, 000)' :
-      #         DN >= 32 ? 'rgb(255, 127, 000)' :
-      #         DN >= 26 ? 'rgb(238, 064, 000)' :
-      #         DN >= 23 ? 'rgb(205, 000, 000)' :
-      #         DN >= 20 ? 'rgb(139, 000, 000)' :
-      #         DN >= 17 ? 'rgb(139, 000, 139)' :
-      #         DN >= 14 ? 'rgb(145, 044, 238)' :
-      #         DN >= 12 ? 'rgb(200, 104, 255)' :
-      #         DN >= 10 ? 'rgb(000, 238, 238)' :
-      #         DN >= 8  ? 'rgb(000, 178, 238)' :
-      #         DN >= 6  ? 'rgb(030, 144, 255)' :
-      #         DN >= 5  ? 'rgb(016, 078, 139)' :
-      #         DN >= 4  ? 'rgb(000, 139, 000)' :
-      #         DN >= 3  ? 'rgb(000, 205, 000)' :
-      #         DN >= 2  ? 'rgb(170, 255, 127)' :
-      #         DN >= 1  ? 'rgb(234, 255, 191)' :
-      #         'rgba(255, 255, 255, 0)' :
-
-      #       return 'red'
-
-      #     }
+            }
