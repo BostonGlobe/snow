@@ -70,7 +70,7 @@ color:
 
 
 
-all: clean_all download preprocess polygonize presimplify topojsonize color
+all: clean_all download preprocess polygonize presimplify topojsonize deploy
 
 
 
