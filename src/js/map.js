@@ -28,6 +28,7 @@ const map = {
 		const geocoder = L.Mapzen.geocoder(mapzenKey, {
 			params: {
 				'boundary.country': 'USA',
+				layers: 'locality,county,macrocounty,region,macroregion',
 			},
 		})
 		geocoder.addTo(map)
