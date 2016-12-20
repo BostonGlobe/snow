@@ -19,6 +19,15 @@ clearfix()
 		display table
 		clear both
 
+//===============================
+// Z-INDEX
+//===============================
+set-index(layer)
+	if layer in $z-index
+		return $z-index[layer]
+	else
+		error('Not a layer in z-index')
+
 //=======================
 // VERTICAL RHYTHM
 //=======================

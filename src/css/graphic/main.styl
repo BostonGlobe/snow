@@ -1,11 +1,51 @@
+$primary-color = #A6B1E1
+// Main content
+body
+	padding 30px
+	&:before
+		content ''
+		overflow auto
+		display block
+		position fixed
+		z-index set-index('bottom')
+		top 0
+		left @top
+		right @top
+		bottom @top
+		box-shadow inset $primary-color 0 0 0 15px, inset darken($primary-color, 5) 10px 10px 0 10px, inset darken($primary-color, 5) -10px -10px 0 10px
+main
+	margin 2em auto
+	width 95%
+
+// Intro
+.intro
+	text-align center
+	margin-bottom 2em
+	&__hed
+		font-size 2rem
+		+mq('bp-2')
+			font-size 3.5rem
+		mark
+			background-color transparent
+			position relative
+			color darken($primary-color, 40)
+		input
+			font-size 2rem
+			border none
+			width 4.5em
+			border-bottom 5px solid $primary-color
+			transition 0.2s ease-in-out background-color
+			+mq('bp-2')
+				font-size 3.5rem
+			&::placeholder
+				color $offblack
+			&:focus
+				background-color rgba($primary-color, 0.25)
+			
+// Map
 .observed-snowfall
-
-  border solid red 1px
-  width 100%
-  height 50em
-  padding 1em
-
-  .observed-snowfall--map
-    border solid blue 1px
-    width 100%
-    height 100%
+	width 100%
+	height 65vh
+	&--map
+		width 100%
+		height 100%
