@@ -46,10 +46,23 @@ presimplify:
 
 
 
+reports:
+
+	# Grab latest reports
+	curl 'http://localhost:3010/reports.json' | \
+		in2csv -f json | \
+		csvjson --lat Latitude --lon Longitude > output/allReports.geojson;
+
+	# Clip reports to snowfall
+	cd output; \
+		mapshaper allReports.geojson -clip snowtotals.geojson -o reports.geojson;
+
+
+
 topojsonize:
 
 	# Topojsonize and simplify the GeoJSON
-	geo2topo output/snowtotals.geojson | \
+	geo2topo output/reports.geojson output/snowtotals.geojson | \
 		toposimplify -s 0.0000001 -f | \
 		topoquantize 10000 \
 		> output/snowtotals.topojson;
@@ -70,7 +83,7 @@ color:
 
 
 
-all: clean_all download preprocess polygonize presimplify topojsonize deploy
+all: clean_all download preprocess polygonize presimplify reports topojsonize deploy
 
 
 
