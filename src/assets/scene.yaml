@@ -2,17 +2,27 @@ import: https://mapzen.com/carto/refill-style/4/refill-style.yaml
 
 sources:
 
-    snowtotals:
+    _snowtotals:
       type: TopoJSON
       url: /assets/snowtotals.topojson
 
 layers:
 
+    reports:
+      data: { source: _snowtotals }
+      draw:
+        text:
+          text_source: Amount
+          font:
+            weight: bold
+            fill: black
+            stroke: { color: white, width: 3 }
+            size: 1.5em
+
     snowtotals:
-      data: { source: snowtotals }
+      data: { source: _snowtotals }
       draw:
         lines:
-          # order: global.sdk_order_under_roads_0
           order: 383
           width: [[1, 0.25px], [10, 1px]]
           color: |
@@ -44,7 +54,6 @@ layers:
             }
 
         polygons:
-          # order: global.sdk_order_under_roads_0
           order: 383
           color: |
             function() {
