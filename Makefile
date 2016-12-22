@@ -39,10 +39,17 @@ presimplify:
 	shp2json output/snowtotals.shp | \
 	ndjson-split 'd.features' | \
 	ndjson-map -r d3 'd.properties.DN = d3.scaleThreshold().domain([0*1000,0.001*1000,0.1*1000,1*1000,2*1000,3*1000,4*1000,6*1000,8*1000,10*1000,12*1000,15*1000,18*1000,21*1000,24*1000,30*1000,36*1000]).range([0,0,0.001,0.1,1,2,3,4,6,8,10,12,15,18,21,24,30,36])(d.properties.DN), d' | \
-	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", features: []}' | \
-	geo2topo | \
-	topomerge snowtotals=- -f 'd.properties.DN > 0' -k 'd.properties.DN' | \
-	topo2geo snowtotals=output/snowtotals.geojson;
+	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", features: []}' \
+	> output/allSnowtotals.geojson;
+
+	# Validate fields with ogr2ogr
+	cd output; \
+		ogr2ogr -f "GeoJSON" snowtotals-valid.geojson allSnowtotals.geojson \
+		-dialect sqlite -sql "select ST_MakeValid(geometry) as geometry, * from allSnowtotals where DN > 0"
+
+	# Dissolve fields with mapshaper
+	cd output; \
+		mapshaper snowtotals-valid.geojson snap -dissolve DN -filter-slivers -o snowtotals.geojson;
 
 
 
@@ -83,20 +90,22 @@ color:
 
 
 
-all: clean_all download preprocess polygonize presimplify reports topojsonize deploy
+all: clean_all download preprocess polygonize presimplify reports topojsonize deploy color
 
 
 
-pre: clean_all download
+input: clean_all download
 
 
 
-post:
+output:
 	make clean dir=output
 	make preprocess
 	make polygonize
 	make presimplify
+	make reports
 	make topojsonize
+	make deploy
 	make color
 
 
