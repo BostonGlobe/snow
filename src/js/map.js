@@ -1,7 +1,5 @@
 import { select } from './utils/dom.js'
 
-const mapzenKey = 'mapzen-PvGhJST'
-
 const map = {
 
 	init() {
@@ -22,23 +20,14 @@ const map = {
 			],
 		})
 
-		map.attributionControl.addAttribution('Snowfall analysis <a href="https://www.nohrsc.noaa.gov/snowfall/">NOHRSC</a>');
-
-		// Add geocoder
-		const geocoder = L.Mapzen.geocoder(mapzenKey, {
-			params: {
-				'boundary.country': 'USA',
-				layers: 'locality,county,macrocounty,region,macroregion',
-			},
-		})
-		geocoder.addTo(map)
+		map.attributionControl.addAttribution('Snowfall analysis <a href="https://www.nohrsc.noaa.gov/snowfall/">NOHRSC</a>')
 
 		// Add locator button
 		const locator = L.Mapzen.locator()
 		locator.addTo(map)
 
 		// Keep track of map location in URL hash
-		L.Mapzen.hash({ map, geocoder })
+		L.Mapzen.hash({ map })
 
 	}
 
