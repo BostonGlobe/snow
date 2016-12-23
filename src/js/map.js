@@ -32,22 +32,7 @@ const startMap = () => {
 	L.Mapzen.hash({ map })
 
 	const input = select('.intro__hed__search')
-	new Awesomplete(input, {
-		list: [
-			'one',
-			'two',
-			'three',
-			'four',
-			'five',
-			'six',
-			'seven',
-			'eight',
-			'nine',
-			'ten',
-			'eleven',
-			'twelve',
-		]
-	})
+	const awesome = new Awesomplete(input)
 
 	input.addEventListener('input', e => {
 
@@ -56,26 +41,17 @@ const startMap = () => {
 		// If value is longer than 2 characters,
 		if (value.length > 1) {
 
-			// search
-			search(value, (error, data) => {
+			// search,
+			search(value, data => {
 
-				console.log({ error, data })
+				// and display the results.
+				awesome.list = data.map(v => v.label)
 
 			})
 
 		}
 
 	})
-
-		// // Add geocoder
-		// const geocoder = L.Mapzen.geocoder(mapzenKey, {
-		// 	params: {
-		// 		'boundary.country': 'USA',
-		// 		layers: 'locality,county,macrocounty,region,macroregion',
-		// 	},
-		// 	placeholder: 'hey',
-		// })
-		// geocoder.addTo(map)
 
 }
 

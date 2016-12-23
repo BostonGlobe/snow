@@ -52,21 +52,27 @@ main
 			background-color transparent
 			position relative
 			color darken($primary-color, 40)
-		// input
-		// 	font-size 2rem
-		// 	border none
-		// 	width 4.5em
-		// 	border-bottom 5px solid $primary-color
-		// 	transition 0.2s ease-in-out background-color
-		// 	+mq('bp-2')
-		// 		font-size 3.5rem
-		// 	&::placeholder
-		// 		color $offblack
-		// 	&:focus
-		// 		background-color rgba($primary-color, 0.25)
+
+		input
+			font-size 2rem
+			border none
+			border-bottom 5px solid $primary-color
+			transition 0.2s ease-in-out background-color
+
+			// +mq('bp-2')
+			// 	font-size 3.5rem
+
+			&::placeholder
+				color $offblack
+			&:focus
+				background-color rgba($primary-color, 0.25)
 
 .awesomplete
 	z-index 10000
+
+	ul
+		font-size 1.5rem
+		text-align left
 
 // Map
 .observed-snowfall

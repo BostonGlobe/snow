@@ -1,4 +1,5 @@
 import { json } from 'd3-request'
+import _ from 'lodash'
 
 const mapzenKey = 'mapzen-PvGhJST'
 
@@ -8,10 +9,24 @@ const search = (text, callback) => {
 
 	json(url, (error, data) => {
 
-		callback(error, data)
+		if (error) {
+			console.error(error)
+		} else {
+
+			const results = _.get(data, 'features')
+				.map(v => ({
+					label: _.get(v, 'properties.label').replace(/, usa$/gi, ''),
+					coordinates: _.get(v, 'geometry.coordinates'),
+				}))
+
+			callback(results)
+
+		}
 
 	})
 
 }
 
-export default search
+const searchDebounced = _.debounce(search, 1000/6)
+
+export default searchDebounced
