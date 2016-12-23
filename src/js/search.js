@@ -16,7 +16,7 @@ const search = (text, callback) => {
 			const results = _.get(data, 'features')
 				.map(v => ({
 					label: _.get(v, 'properties.label').replace(/, usa$/gi, ''),
-					coordinates: _.get(v, 'geometry.coordinates'),
+					value: _.get(v, 'geometry.coordinates'),
 				}))
 
 			callback(results)

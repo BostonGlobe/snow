@@ -11,6 +11,7 @@ const startMap = () => {
 
 	// Create Mapzen map in map container
 	const map = L.Mapzen.map(mapElement, {
+		apiKey: mapzenKey,
 		center: [42.45, -73.089],
 		zoom: 6.5,
 		scene: 'assets/scene.yaml',
@@ -32,7 +33,17 @@ const startMap = () => {
 	L.Mapzen.hash({ map })
 
 	const input = select('.intro__hed__search')
-	const awesome = new Awesomplete(input)
+	const awesome = new Awesomplete(input, {
+		sort: () => 0,
+	})
+
+	window.addEventListener('awesomplete-selectcomplete', e => {
+
+		const [lon, lat] = e.text.value
+
+		map.setView([lat, lon], 10)
+
+	})
 
 	input.addEventListener('input', e => {
 
@@ -45,7 +56,7 @@ const startMap = () => {
 			search(value, data => {
 
 				// and display the results.
-				awesome.list = data.map(v => v.label)
+				awesome.list = data
 
 			})
 
