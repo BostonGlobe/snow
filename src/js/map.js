@@ -1,4 +1,7 @@
 import { select } from './utils/dom.js'
+import Awesomplete from 'awesomplete'
+
+const mapzenKey = 'mapzen-PvGhJST'
 
 const map = {
 
@@ -28,6 +31,34 @@ const map = {
 
 		// Keep track of map location in URL hash
 		L.Mapzen.hash({ map })
+
+		const input = select('.intro__hed__search')
+		new Awesomplete(input, {
+			list: [
+				'one',
+				'two',
+				'three',
+				'four',
+				'five',
+				'six',
+				'seven',
+				'eight',
+				'nine',
+				'ten',
+				'eleven',
+				'twelve',
+			]
+		})
+
+		// // Add geocoder
+		// const geocoder = L.Mapzen.geocoder(mapzenKey, {
+		// 	params: {
+		// 		'boundary.country': 'USA',
+		// 		layers: 'locality,county,macrocounty,region,macroregion',
+		// 	},
+		// 	placeholder: 'hey',
+		// })
+		// geocoder.addTo(map)
 
 	}
 

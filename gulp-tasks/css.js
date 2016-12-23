@@ -12,7 +12,9 @@ const report = require('../report-error.js')
 gulp.task('css-dev', () => {
 	gulp.src('src/css/config.styl')
 		.pipe(plumber({ errorHandler: report }))
-		.pipe(stylus())
+		.pipe(stylus({
+			'include css': true,
+		}))
 		.pipe(autoprefixer())
 		.pipe(combineMq())
 		.pipe(rename('main.css'))
