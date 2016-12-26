@@ -5,7 +5,7 @@ const mapzenKey = 'mapzen-PvGhJST'
 
 const search = (text, callback) => {
 
-	const url = `https://search.mapzen.com/v1/autocomplete?text=${text}&api_key=${mapzenKey}&boundary.country=USA&layers=locality%2Ccounty%2Cmacrocounty%2Cregion%2Cmacroregion`
+	const url = `https://search.mapzen.com/v1/autocomplete?text=${text}&api_key=${mapzenKey}&boundary.country=USA&layers=locality`
 
 	json(url, (error, data) => {
 
