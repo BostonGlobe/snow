@@ -32,7 +32,7 @@ const startMap = () => {
 	// Keep track of map location in URL hash
 	L.Mapzen.hash({ map })
 
-	const input = select('.intro__hed__search')
+	const input = select('.js-search')
 	const awesome = new Awesomplete(input, {
 		sort: () => 0,
 	})
