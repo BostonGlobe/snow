@@ -54,23 +54,37 @@ main
 			position relative
 			color darken($primary-color, 40)
 
-		input
-			font-size 2rem
-			border none
-			border-bottom 5px solid $primary-color
-			transition 0.2s ease-in-out background-color
-			width 100%
-			+mq('bp-2')
-				font-size 3.5rem
-
-			&::placeholder
-				color $offblack
-			&:focus
-				background-color rgba($primary-color, 0.25)
+	&__search
+		font-size 2rem
+		border none
+		border-bottom 5px solid $primary-color
+		transition 0.2s ease-in-out background-color
+		width 100%
+		padding-left 3rem
+		+mq('bp-2')
+			font-size 3.5rem
+		&::placeholder
+			color $offblack
+		&:focus
+			background-color rgba($primary-color, 0.25)
 
 // Search overrides
 div.awesomplete
 	z-index 10000
+	&:before
+		content ''
+		display block
+		position absolute
+		left 0.5rem
+		bottom 1rem
+		background-image url($assets-path + 'search.svg')
+		background-repeat no-repeat
+		background-size contain
+		width 1.5rem
+		height @width
+		opacity 0.7
+		+mq('bp-2')
+			bottom 2rem
 	> ul
 		font-size 1.5rem
 		text-align left
