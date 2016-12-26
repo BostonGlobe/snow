@@ -26,7 +26,6 @@ layers:
             function() {
               return feature.Amount + global.suffix
             }
-          repeat_distance: 1000px
           font:
             weight: bold
             fill: black
