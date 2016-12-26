@@ -68,6 +68,7 @@ main
 			&:focus
 				background-color rgba($primary-color, 0.25)
 
+// Search overrides
 div.awesomplete
 	z-index 10000
 	> ul
@@ -79,6 +80,7 @@ div.awesomplete
 		&:before
 			display none
 		> li
+			// only display 5 results at a time
 			&:nth-child(n+6)
 				display none
 			[aria-selected="true"]
