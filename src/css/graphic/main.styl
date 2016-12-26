@@ -9,6 +9,7 @@ $body-border
 	z-index 1000
 
 // Main content
+// Body border
 html:before
 	@extends $body-border
 	top 0
@@ -58,9 +59,9 @@ main
 			border none
 			border-bottom 5px solid $primary-color
 			transition 0.2s ease-in-out background-color
-
-			// +mq('bp-2')
-			// 	font-size 3.5rem
+			width 100%
+			+mq('bp-2')
+				font-size 3.5rem
 
 			&::placeholder
 				color $offblack
@@ -69,7 +70,6 @@ main
 
 .awesomplete
 	z-index 10000
-
 	ul
 		font-size 1.5rem
 		text-align left
