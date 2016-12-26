@@ -68,11 +68,21 @@ main
 			&:focus
 				background-color rgba($primary-color, 0.25)
 
-.awesomplete
+div.awesomplete
 	z-index 10000
-	ul
+	> ul
 		font-size 1.5rem
 		text-align left
+		border-radius 0px
+		border 5px solid rgba($primary-color, 0.5)
+		background-color white
+		&:before
+			display none
+		> li
+			&:nth-child(n+6)
+				display none
+			[aria-selected="true"]
+				background-color darken($primary-color, 40)
 
 // Map
 .observed-snowfall
