@@ -35,6 +35,34 @@ layers:
     snowtotals:
       data: { source: _snowtotals }
       draw:
+
+        # lines:
+        #   order: 383
+        #   visible: false
+        #   width: 10px
+        #   color: |
+        #     function() {
+        #       var DN = feature.DN
+        #       var color =
+        #         DN < 0.100 ? 'rgb(234, 255, 191)' :
+        #         DN < 1     ? 'rgb(170, 255, 127)' :
+        #         DN < 2     ? 'rgb(000, 205, 000)' :
+        #         DN < 3     ? 'rgb(000, 139, 000)' :
+        #         DN < 4     ? 'rgb(016, 078, 139)' :
+        #         DN < 6     ? 'rgb(030, 144, 255)' :
+        #         DN < 8     ? 'rgb(000, 178, 238)' :
+        #         DN < 10    ? 'rgb(000, 238, 238)' :
+        #         DN < 12    ? 'rgb(200, 104, 255)' :
+        #         DN < 15    ? 'rgb(145, 044, 238)' :
+        #         DN < 18    ? 'rgb(139, 000, 139)' :
+        #         DN < 21    ? 'rgb(139, 000, 000)' :
+        #         DN < 24    ? 'rgb(205, 000, 000)' :
+        #         DN < 30    ? 'rgb(238, 064, 000)' :
+        #         DN < 36    ? 'rgb(255, 127, 000)' :
+        #         'rgb(255, 255, 000)';
+        #       return color;
+        #     }
+
         polygons:
           order: 383
           color: |
