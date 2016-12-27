@@ -12,6 +12,8 @@ import {
 
 const mapzenKey = 'mapzen-PvGhJST'
 
+let WAITING_FOR_TANGRAM = false
+
 const startMap = () => {
 
 	// Select DOM map container.
@@ -31,6 +33,7 @@ const startMap = () => {
 		],
 	})
 
+	// Set attribution.
 	map.attributionControl.addAttribution('Snowfall analysis <a href="https://www.nohrsc.noaa.gov/snowfall/">NOHRSC</a>')
 
 	// Add locator button.
@@ -40,6 +43,45 @@ const startMap = () => {
 	// Keep track of map location in URL hash.
 	L.Mapzen.hash({ map })
 
+	let scene
+
+	// Listen to the Tangram layer being loaded on the map.
+	map.on('tangramloaded', e => {
+
+		// Save scene to variable.
+		scene = e.tangramLayer.scene
+
+		scene.subscribe({
+			view_complete: e => {
+
+				if (WAITING_FOR_TANGRAM) {
+
+					console.log('going to find feature')
+
+					const { x, y } = map.getSize()
+
+					// get the underlying feature,
+					// TODO: do we need to polyfill promises?
+					scene.getFeatureAt({ x: x / 2, y: y / 2 })
+						.then(selection => {
+
+							console.log(JSON.stringify(selection, null, 2))
+
+							// // get snow totals,
+							// const DN = _.get(selection, 'feature.properties.DN')
+
+						})
+
+				}
+
+				WAITING_FOR_TANGRAM = false
+
+			},
+		})
+
+	})
+
+	// Initialize the autocomplete dropdown.
 	const input = select('.js-search')
 	const awesome = new Awesomplete(input, {
 		sort: () => 0,
@@ -60,15 +102,20 @@ const startMap = () => {
 		// If we got a match,
 		if (match) {
 
+			// get the match coordinates,
 			const [lon, lat] = match.coordinates
 
-			// set the map to the right coordinates.
+			// set a boolean flag,
+			WAITING_FOR_TANGRAM = true
+
+			// and set the map to the right coordinates.
 			map.setView([lat, lon], 10)
 
 		}
 
 	})
 
+	// Respond to user selecting a dropdown entry.
 	input.addEventListener('input', e => {
 
 		const { value } = e.target

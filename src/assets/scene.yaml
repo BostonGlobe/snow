@@ -64,6 +64,7 @@ layers:
         #     }
 
         polygons:
+          interactive: true
           order: 383
           color: |
             function() {
