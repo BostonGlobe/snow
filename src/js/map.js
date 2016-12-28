@@ -17,7 +17,7 @@ import { select } from './utils/dom.js'
 const startMap = () => {
 
 	// Select DOM map container.
-	const mapElement = select('.observed-snowfall--map')
+	const mapElement = select('.observed-snowfall__map')
 
 	// Create Mapzen map in map container.
 	const map = L.Mapzen.map(mapElement, {
