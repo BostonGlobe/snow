@@ -21,8 +21,8 @@ const startMap = (url) => {
 
 	// Create Mapzen map in map container.
 	const map = L.Mapzen.map(mapElement, {
-		center: [42.45, -73.089],
-		zoom: 6.5,
+		center: [42.2040, -71.8674],
+		zoom: 7,
 		scene: 'assets/scene.yaml',
 		minZoom: 2,
 		maxZoom: 10,
