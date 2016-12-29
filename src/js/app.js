@@ -1,4 +1,5 @@
 import * as request from 'd3-request'
+import dateline from 'dateline'
 
 import { select } from './utils/dom.js'
 import setPathCookie from './utils/setPathCookie.js'
@@ -32,26 +33,41 @@ request.json('/assets/snowtotals.topojson', (error, json) => {
 
 	} else {
 
+		// Get the DOM element we are going to modify.
+		const jsTime = select('.js-time')
+
 		const { timestamp } = json
 
 		if (timestamp) {
 
-			const timestamp = new Date(json.timestamp)
+			// Split out timestamp string into various parts.
+			const [year, month, date, hours, minutes ] = timestamp.split(/-|\s|:/)
+
+			// Create a dateline-wrapped date.
+			const wrapped = dateline(new Date(year, month - 1, date, hours, minutes))
+
+			// Create the `datetime` attribute string.
+			const datetimeAttr = `${year}-${month}-${date}T${hours}:${minutes}`
+
+			// Create the human-readable string.
+			const human = `${wrapped.getAPDate()}, ${wrapped.getAPTime({includeMinutes: true})}`
+
+
+			// Set its innerHTML and datetime attribute.
+			jsTime.innerHTML = human
+			jsTime.setAttribute('datetime', datetimeAttr)
+
+		} else {
+
+			jsTime.innerHTML = 'No data available'
 
 		}
 
-
-		select('.js-time').innerHTML = 'Dec. 8, 3:29 p.m.'
-
 	}
 
-	// what do i need to do? get the datetime and write it to JSON
-	// in node,
-	// read topojson, read reports,
-	// get the datetime from reports,
-	// write to topojson
-
 })
+
+
 
 
 

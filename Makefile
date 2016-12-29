@@ -85,6 +85,7 @@ topojsonize:
 
 deploy:
 
+	npm run timestamp;
 	cp output/snowtotals.topojson src/assets/snowtotals.topojson
 
 
