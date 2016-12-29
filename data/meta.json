@@ -11,6 +11,6 @@
 	"teasers": [],
 	"social": true,
 	"meter": true,
-	"socialConnect": false,
+	"socialConnect": true,
 	"ads": false
 }
