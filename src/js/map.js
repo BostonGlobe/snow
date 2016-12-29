@@ -26,10 +26,6 @@ const startMap = (url) => {
 		scene: 'assets/scene.yaml',
 		minZoom: 2,
 		maxZoom: 10,
-		maxBounds: [
-			[23.40276490540795, -130.869140625], // southwest
-			[51.12421275782688, -58.00781249999999], // northeast
-		],
 	})
 
 	// Set attribution.
