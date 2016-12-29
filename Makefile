@@ -56,13 +56,8 @@ presimplify:
 
 reports:
 
-	# # Grab latest reports
-	# curl 'http://cache.boston.com/partners/snowfallscraper/snowfall_scraper.json' > output/snowfall_scraper.json;
-
-	# Grab the reports
-	cd ../snowfall_scraper; \
-		npm run prod; \
-		cp snowfall_scraper.json ../snow/output/snowfall_scraper.json;
+	# Grab latest reports
+	curl 'http://cache.boston.com/partners/snowfallscraper/snowfall_scraper.json' > output/snowfall_scraper.json;
 
 	# Keep just the properties we want
 	cd output; \
