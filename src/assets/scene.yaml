@@ -1,9 +1,5 @@
 import: https://mapzen.com/carto/refill-style/4/refill-style.yaml
 
-global:
-  suffix: ''
-  # suffix: '”'
-
 sources:
 
     _snowtotals:
@@ -24,7 +20,7 @@ layers:
           style: custom-labels
           text_source: |
             function() {
-              return feature.Amount + global.suffix
+              return feature.Amount
             }
           font:
             weight: bold
