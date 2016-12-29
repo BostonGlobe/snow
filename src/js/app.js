@@ -5,9 +5,11 @@ import setPathCookie from './utils/setPathCookie.js'
 import removeMobileHover from './utils/removeMobileHover.js'
 import wireSocialButtons from './utils/wireSocialButtons.js'
 import startMap from './map.js'
+import credits from './credits.js'
 
 removeMobileHover()
 setPathCookie()
+credits()
 
 // Add class to html if JS is loaded
 document.querySelector('html').classList.add('js-is-loaded')
