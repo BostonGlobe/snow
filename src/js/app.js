@@ -32,7 +32,7 @@ request.json('/assets/snowtotals.topojson', (error, json) => {
 		
 		const timestamp = json.timestamp
 
-		select('h1.timestamp-js').innerHTML = 'Last updated Dec. 8, 3:29 p.m.'
+		select('.js-time').innerHTML = 'Dec. 8, 3:29 p.m.'
 
 	}
 
