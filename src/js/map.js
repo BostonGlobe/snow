@@ -42,13 +42,22 @@ const startMap = () => {
 	// Keep track of map location in URL hash.
 	L.Mapzen.hash({ map })
 
-	// let scene
+	let scene
 
-	// // Listen to the Tangram layer being loaded on the map.
-	// map.on('tangramloaded', e => {
+	// Listen to the Tangram layer being loaded on the map.
+	map.on('tangramloaded', e => {
 
-	// 	// Save scene to variable.
-	// 	scene = e.tangramLayer.scene
+		// Save scene to variable.
+		scene = e.tangramLayer.scene
+
+		// Force cache busting
+		// TODO: update this with the real url once it's ready
+		scene.setDataSource('_snowtotals', {
+			type: 'TopoJSON',
+			url: '/assets/snowtotals.topojson?q=' + Date.now(),
+		})
+
+	})
 
 	// 	scene.subscribe({
 	// 		view_complete: e => {
