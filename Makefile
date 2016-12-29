@@ -56,16 +56,20 @@ presimplify:
 
 reports:
 
+	# # Grab latest reports
+	# curl 'http://cache.boston.com/partners/snowfallscraper/snowfall_scraper.json' > output/snowfall_scraper.json;
+
+	# Grab the reports
 	cd ../snowfall_scraper; \
 		npm run prod; \
-		cd ../snow; \
-		cat ../snowfall_scraper/snowfall_scraper.json | in2csv -f json | \
-		csvjson --lat Latitude --lon Longitude > output/allReports.geojson;
+		cp snowfall_scraper.json ../snow/output/snowfall_scraper.json;
 
-	# # Grab latest reports
-	# curl 'http://cache.boston.com/partners/snowfallscraper/snowfall_scraper.json' | \
-	# 	in2csv -f json | \
-	# 	csvjson --lat Latitude --lon Longitude > output/allReports.geojson;
+	# Keep just the properties we want
+	cd output; \
+		cat snowfall_scraper.json | \
+		in2csv -f json | \
+		csvcut -c Latitude,Longitude,Amount | \
+		csvjson --lat Latitude --lon Longitude > allReports.geojson;
 
 	# Clip reports to snowfall
 	cd output; \
