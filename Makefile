@@ -56,10 +56,16 @@ presimplify:
 
 reports:
 
-	# Grab latest reports
-	curl 'http://cache.boston.com/partners/snowfallscraper/snowfall_scraper.json' | \
-		in2csv -f json | \
+	cd ../snowfall_scraper; \
+		npm run prod; \
+		cd ../snow; \
+		cat ../snowfall_scraper/snowfall_scraper.json | in2csv -f json | \
 		csvjson --lat Latitude --lon Longitude > output/allReports.geojson;
+
+	# # Grab latest reports
+	# curl 'http://cache.boston.com/partners/snowfallscraper/snowfall_scraper.json' | \
+	# 	in2csv -f json | \
+	# 	csvjson --lat Latitude --lon Longitude > output/allReports.geojson;
 
 	# Clip reports to snowfall
 	cd output; \
@@ -107,7 +113,6 @@ output:
 	make reports
 	make topojsonize
 	make deploy
-	make color
 
 
 
