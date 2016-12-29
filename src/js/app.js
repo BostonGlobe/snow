@@ -1,3 +1,6 @@
+import * as request from 'd3-request'
+
+import { select } from './utils/dom.js'
 import setPathCookie from './utils/setPathCookie.js'
 import removeMobileHover from './utils/removeMobileHover.js'
 import wireSocialButtons from './utils/wireSocialButtons.js'
@@ -18,3 +21,20 @@ if (document.querySelectorAll('.g-header__share').length) {
 }
 
 startMap()
+
+request.json('/assets/snowtotals.topojson', (error, json) => {
+
+	if (error) {
+
+		console.error(error)
+
+	} else {
+		
+		const timestamp = json.timestamp
+
+		select('h1.timestamp-js').innerHTML = 'Last updated Dec. 8, 3:29 p.m.'
+
+	}
+
+
+})
