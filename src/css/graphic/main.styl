@@ -116,14 +116,14 @@ div.awesomplete
 		font-size 1em
 		margin-bottom 0.5em
 	&__list
-		column-count 5
+		column-count 9
 		column-gap 0
 		+mq('bp-2')
 			column-count 17
 	&__term
 		font-size 0.7em
 		margin-bottom 0.25em
-		&:not(:nth-of-type(4n+1))
+		&:not(:nth-of-type(2n+1))
 			display none
 			+mq('bp-2')
 				display block
@@ -139,7 +139,7 @@ div.awesomplete
 			border-right @border-top
 		&:first-of-type
 			border-left @border-top
-		&:not(:nth-of-type(4n+1))
+		&:not(:nth-of-type(2n+1))
 			display none
 			+mq('bp-2')
 				display block
