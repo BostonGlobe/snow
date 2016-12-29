@@ -12,4 +12,7 @@ const timestamp = _(reports.features)
 	.last()
 
 topo.timestamp = timestamp.tz('America/New_York').format('YYYY-MM-DD HH:mm')
+
+console.log(topo.timestamp)
+
 fs.writeJsonSync('./output/snowtotals.topojson', topo)
