@@ -31,12 +31,32 @@ request.json('/assets/snowtotals.topojson', (error, json) => {
 		console.error(error)
 
 	} else {
-		
-		const timestamp = json.timestamp
+
+		const { timestamp } = json
+
+		if (timestamp) {
+
+			const timestamp = new Date(json.timestamp)
+
+		}
+
 
 		select('.js-time').innerHTML = 'Dec. 8, 3:29 p.m.'
 
 	}
 
+	// what do i need to do? get the datetime and write it to JSON
+	// in node,
+	// read topojson, read reports,
+	// get the datetime from reports,
+	// write to topojson
 
 })
+
+
+
+
+
+
+
+
