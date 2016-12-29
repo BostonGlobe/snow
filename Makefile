@@ -57,7 +57,7 @@ presimplify:
 reports:
 
 	# Grab latest reports
-	curl 'http://localhost:3010/reports.json' | \
+	curl 'http://cache.boston.com/partners/snowfallscraper/snowfall_scraper.json' | \
 		in2csv -f json | \
 		csvjson --lat Latitude --lon Longitude > output/allReports.geojson;
 
@@ -91,7 +91,7 @@ color:
 
 
 
-all: clean_all download preprocess polygonize presimplify reports topojsonize deploy color
+all: clean_all download preprocess polygonize presimplify reports topojsonize deploy
 
 
 

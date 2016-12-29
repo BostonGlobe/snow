@@ -4,7 +4,20 @@ This project was generated with [slush-globeapp](https://github.com/BostonGlobe/
 
 Please note: do not reproduce Boston Globe logos or fonts without written permission.
 
-## Setup
+## Cronjob setup
+
+### Install dependencies
+
+- Run `sudo pip install csvkit`
+- Run `npm install -g shapefile d3 ndjson-cli mapshaper topojson-server topojson-simplify topojson-client`
+- Run `brew install gdal`
+- Finally, note that this project depends on `http://jenkins.boston.com/cron/job/snowfall-scraper/`. Make sure that is successful before you try this one.
+
+### Running the cronjob
+
+- Every 15 minutes, run `make all year=2016 month=12 day=27`. This will generate `output/snowtotals.topojson`. Publish this to production.
+
+## Project setup
 Clone repo and run `yarn`.
 
 If pulling from google or methode, run the command(s) below to stay up-to-date:
