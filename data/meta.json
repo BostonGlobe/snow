@@ -4,7 +4,7 @@
 	"description": "Recent snowfall in the US",
 	"keywords": "snowfall, snow totals, snow",
 	"url": "https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals",
-	"imageUrl": "https://apps.bostonglobe.com/path/to/image",
+	"imageUrl": "https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snow-og.jpg",
 	"section": "Metro",
 	"sectionUrl": "//bostonglobe.com/metro",
 	"credits": "",
