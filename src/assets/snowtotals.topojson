@@ -1393,6 +1393,27 @@
         {
           "type": "Point",
           "properties": {
+            "Station_Id": "CO-SU-67",
+            "Name": "BRECKENRIDGE 1.9 SSE, CO",
+            "Elevation": "9875 feet",
+            "Physical_Element": "snowfall",
+            "DateTime_Report(UTC)": "2016-12-28 14:00",
+            "Amount": "2",
+            "Amount_Units": "in",
+            "Duration": "24",
+            "Duration_Units": "hours",
+            "Zip_Code": "80424",
+            "": "",
+            "date": "2016-12-28T19:00:00.000Z"
+          },
+          "coordinates": [
+            3283,
+            987
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
             "Station_Id": "CO-SU-8",
             "Name": "SILVERTHORNE 7.4 NW, CO",
             "Elevation": "8993 feet",
@@ -1880,14 +1901,14 @@
             "Name": "FARGO 3S",
             "Elevation": "902 feet",
             "Physical_Element": "snowfall",
-            "DateTime_Report(UTC)": "2016-12-28 23:00",
+            "DateTime_Report(UTC)": "2016-12-29 03:00",
             "Amount": "0.7",
             "Amount_Units": "in",
-            "Duration": "12",
+            "Duration": "14",
             "Duration_Units": "hours",
             "Zip_Code": "58104",
             "": "",
-            "date": "2016-12-29T04:00:00.000Z"
+            "date": "2016-12-29T08:00:00.000Z"
           },
           "coordinates": [
             4905,
@@ -2375,6 +2396,27 @@
           "coordinates": [
             6873,
             7367
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "Station_Id": "HWYO3",
+            "Name": "HALFWAY",
+            "Elevation": "2664 feet",
+            "Physical_Element": "snowfall",
+            "DateTime_Report(UTC)": "2016-12-29 03:00",
+            "Amount": "0.5",
+            "Amount_Units": "in",
+            "Duration": "24",
+            "Duration_Units": "hours",
+            "Zip_Code": "97834",
+            "": "",
+            "date": "2016-12-29T08:00:00.000Z"
+          },
+          "coordinates": [
+            1336,
+            5910
           ]
         },
         {
@@ -4979,6 +5021,27 @@
           "coordinates": [
             9384,
             5352
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "Station_Id": "MZAW1",
+            "Name": "MAZAMA",
+            "Elevation": "2119 feet",
+            "Physical_Element": "snowfall",
+            "DateTime_Report(UTC)": "2016-12-28 18:00",
+            "Amount": "0.9",
+            "Amount_Units": "in",
+            "Duration": "24",
+            "Duration_Units": "hours",
+            "Zip_Code": "98833",
+            "": "",
+            "date": "2016-12-28T23:00:00.000Z"
+          },
+          "coordinates": [
+            758,
+            9300
           ]
         },
         {
@@ -7709,6 +7772,27 @@
           "coordinates": [
             6864,
             5803
+          ]
+        },
+        {
+          "type": "Point",
+          "properties": {
+            "Station_Id": "TKFO3",
+            "Name": "TOKETEE FALLS",
+            "Elevation": "2051 feet",
+            "Physical_Element": "snowfall",
+            "DateTime_Report(UTC)": "2016-12-29 03:00",
+            "Amount": "0.7",
+            "Amount_Units": "in",
+            "Duration": "24",
+            "Duration_Units": "hours",
+            "Zip_Code": "97447",
+            "": "",
+            "date": "2016-12-29T08:00:00.000Z"
+          },
+          "coordinates": [
+            399,
+            4448
           ]
         },
         {
@@ -83786,5 +83870,5 @@
       38.4
     ]
   },
-  "timestamp": "2016-12-28 21:30"
+  "timestamp": "2016-12-28 22:00"
 }
