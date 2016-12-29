@@ -23,9 +23,11 @@ if (document.querySelectorAll('.g-header__share').length) {
 	})
 }
 
-startMap()
+const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
 
-request.json('/assets/snowtotals.topojson', (error, json) => {
+startMap(url)
+
+request.json(url, (error, json) => {
 
 	if (error) {
 

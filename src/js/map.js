@@ -14,7 +14,7 @@ import { select } from './utils/dom.js'
 
 // let WAITING_FOR_TANGRAM = false
 
-const startMap = () => {
+const startMap = (url) => {
 
 	// Select DOM map container.
 	const mapElement = select('.observed-snowfall__map')
@@ -54,7 +54,7 @@ const startMap = () => {
 		// TODO: update this with the real url once it's ready
 		scene.setDataSource('_snowtotals', {
 			type: 'TopoJSON',
-			url: '/assets/snowtotals.topojson?q=' + Date.now(),
+			url,
 		})
 
 	})
