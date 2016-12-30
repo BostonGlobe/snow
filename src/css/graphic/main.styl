@@ -7,6 +7,9 @@ $body-border
 	position fixed
 	background-color $primary-color
 	z-index 1000
+$container
+	margin 0 auto 2em auto
+	width 95%
 
 // Main content
 // Body border
@@ -38,13 +41,15 @@ body
 		width $body-padding
 
 main
-	margin 2em auto
-	width 95%
+	margin 0 auto
+	padding-top 2em
+	position relative
 
 // Intro
 .intro
+	@extends $container
 	text-align center
-	margin-bottom 2em
+	// margin-bottom 2em
 	&__hed
 		font-size 2rem
 		+mq('bp-2')
@@ -102,17 +107,25 @@ div.awesomplete
 
 // Map
 .observed-snowfall
-	width 100%
 	height 55vh
+	@extends $container
 	&__map
-		width 100%
 		height 100%
+		width 100%
+
+footer
+	box-shadow inset 0 7px 9px -7px rgba($offblack, 0.4)
+	background-color $offwhite
+	height 19vh
 
 // Legend
 .legend
-	margin-bottom 1em
+	@extends $container
+	padding-top 1.5em
+	+mq('bp-2')
+		padding-top 2em
 	&__title
-		font-size 1em
+		font-size 0.8em
 		margin-bottom 0.5em
 	&__list
 		column-count 9
@@ -120,8 +133,9 @@ div.awesomplete
 		+mq('bp-2')
 			column-count 17
 	&__term
-		font-size 0.7em
+		font-size 0.6rem
 		margin-bottom 0.25em
+		color lighten($offblack, 20)
 		&:not(:nth-of-type(2n+1))
 			display none
 			+mq('bp-2')
@@ -130,7 +144,7 @@ div.awesomplete
 		border-top 1px solid $offwhite
 		border-bottom @border-top
 		width 100%
-		height 1rem
+		height 0.75rem
 		for i in (1..17)
 			&:nth-of-type({i})
 				background-color $legend['scale-' + i]
@@ -145,10 +159,10 @@ div.awesomplete
 		
 // Updated
 .updated
-	font-size 0.7em
-	position fixed
-	bottom 1rem
-	right 1rem
+	font-size 0.6rem
+	position absolute
+	top 0.5rem
+	right 0.5rem
 	padding 0.25em
-	background-color white
+	background-color rgba($primary-color, 0.25)
 	z-index 2000
