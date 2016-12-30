@@ -54,28 +54,10 @@ presimplify:
 
 
 
-reports:
-
-	# Grab latest reports
-	curl 'http://cache.boston.com/partners/snowfallscraper/snowfall_scraper.json' > output/snowfall_scraper.json;
-
-	# Keep just the properties we want
-	cd output; \
-		cat snowfall_scraper.json | \
-		in2csv -f json | \
-		csvcut -c Latitude,Longitude,Amount | \
-		csvjson --lat Latitude --lon Longitude > allReports.geojson;
-
-	# Clip reports to snowfall
-	cd output; \
-		mapshaper allReports.geojson -clip snowtotals.geojson -o reports.geojson;
-
-
-
 topojsonize:
 
 	# Topojsonize and simplify the GeoJSON
-	geo2topo output/reports.geojson output/snowtotals.geojson | \
+	geo2topo output/snowtotals.geojson | \
 		toposimplify -s 0.0000001 -f | \
 		topoquantize 10000 \
 		> output/snowtotals.topojson;
@@ -97,7 +79,7 @@ color:
 
 
 
-all: clean_all download preprocess polygonize presimplify reports topojsonize deploy
+all: clean_all download preprocess polygonize presimplify topojsonize deploy
 
 
 
@@ -110,7 +92,6 @@ output:
 	make preprocess
 	make polygonize
 	make presimplify
-	make reports
 	make topojsonize
 	make deploy
 

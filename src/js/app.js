@@ -24,48 +24,48 @@ if (document.querySelectorAll('.g-header__share').length) {
 }
 
 const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
-// const url = 'http://localhost:3000/assets/snowtotals.topojson?q=' + Date.now()
+// const url = '/assets/snowtotals.topojson?q=' + Date.now()
 
 startMap(url)
 
-request.json(url, (error, json) => {
+// request.json(url, (error, json) => {
 
-	if (error) {
+// 	if (error) {
 
-		console.error(error)
+// 		console.error(error)
 
-	} else {
+// 	} else {
 
-		// Get the DOM element we are going to modify.
-		const jsTime = select('.js-time')
+// 		// Get the DOM element we are going to modify.
+// 		const jsTime = select('.js-time')
 
-		const { timestamp } = json
+// 		const { timestamp } = json
 
-		if (timestamp) {
+// 		if (timestamp) {
 
-			// Split out timestamp string into various parts.
-			const [year, month, date, hours, minutes ] = timestamp.split(/-|\s|:/)
+// 			// Split out timestamp string into various parts.
+// 			const [year, month, date, hours, minutes ] = timestamp.split(/-|\s|:/)
 
-			// Create a dateline-wrapped date.
-			const wrapped = dateline(new Date(year, month - 1, date, hours, minutes))
+// 			// Create a dateline-wrapped date.
+// 			const wrapped = dateline(new Date(year, month - 1, date, hours, minutes))
 
-			// Create the `datetime` attribute string.
-			const datetimeAttr = `${year}-${month}-${date}T${hours}:${minutes}`
+// 			// Create the `datetime` attribute string.
+// 			const datetimeAttr = `${year}-${month}-${date}T${hours}:${minutes}`
 
-			// Create the human-readable string.
-			const human = `${wrapped.getAPDate()}, ${wrapped.getAPTime({includeMinutes: true})}`
+// 			// Create the human-readable string.
+// 			const human = `${wrapped.getAPDate()}, ${wrapped.getAPTime({includeMinutes: true})}`
 
 
-			// Set its innerHTML and datetime attribute.
-			jsTime.innerHTML = human
-			jsTime.setAttribute('datetime', datetimeAttr)
+// 			// Set its innerHTML and datetime attribute.
+// 			jsTime.innerHTML = human
+// 			jsTime.setAttribute('datetime', datetimeAttr)
 
-		} else {
+// 		} else {
 
-			jsTime.innerHTML = 'No data available'
+// 			jsTime.innerHTML = 'No data available'
 
-		}
+// 		}
 
-	}
+// 	}
 
-})
+// })
