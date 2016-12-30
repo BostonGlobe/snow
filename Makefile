@@ -38,7 +38,7 @@ presimplify:
 	# Simplify the shapefile by using a threshold scale
 	shp2json output/snowtotals.shp | \
 	ndjson-split 'd.features' | \
-	ndjson-map -r d3 'd.properties.DN = d3.scaleThreshold().domain([0*1000,0.001*1000,0.1*1000,1*1000,2*1000,3*1000,4*1000,6*1000,8*1000,10*1000,12*1000,15*1000,18*1000,21*1000,24*1000,30*1000,36*1000]).range([0,0,0.001,0.1,1,2,3,4,6,8,10,12,15,18,21,24,30,36])(d.properties.DN), d' | \
+	ndjson-map -r d3 'd.properties.DN = d3.scaleThreshold().domain([0*1000,0.001*1000,0.1*1000,0.5*1000,1*1000,2*1000,4*1000,6*1000,8*1000,11*1000,14*1000,17*1000,20*1000,24*1000,28*1000,32*1000,36*1000]).range([0,0,0.001,0.1,0.5,1,2,4,6,8,11,14,17,20,24,28,32,36])(d.properties.DN), d' | \
 	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", features: []}' \
 	> output/allSnowtotals.geojson;
 
