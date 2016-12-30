@@ -32,7 +32,7 @@ layers:
             weight: bold
             fill: black
             stroke: { color: white, width: 4 }
-            size: [[2, 0.75em], [10, 1.5em]]
+            size: [[2, 0.75em], [10, 1.75em]]
 
         polygons:
           interactive: true

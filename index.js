@@ -2,17 +2,10 @@ import fs from 'fs-extra'
 import _ from 'lodash'
 import moment from 'moment-timezone'
 
+const [, , year, month, day] = process.argv
+
 let topo = fs.readJsonSync('./output/snowtotals.topojson')
-const reports = fs.readJsonSync('./output/snowfall_scraper.json')
 
-const timestamp = _(reports)
-	.map('DateTime_Report(UTC)')
-	.map(v => moment.utc(v.trim(), 'YYYY-MM-DD HH:mm'))
-	.sortBy()
-	.last()
-
-topo.timestamp = timestamp.tz('America/New_York').format('YYYY-MM-DD HH:mm')
-
-console.log(topo.timestamp)
+topo.timestamp = [year, month, day].join('-')
 
 fs.writeJsonSync('./output/snowtotals.topojson', topo)

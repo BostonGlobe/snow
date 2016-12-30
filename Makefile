@@ -50,7 +50,6 @@ presimplify:
 	# Dissolve fields with mapshaper
 	cd output; \
 		mapshaper snowtotals-valid.geojson snap -dissolve DN -o snowtotals.geojson;
-		# mapshaper snowtotals-valid.geojson snap -dissolve DN -filter-slivers -o snowtotals.geojson;
 
 
 
@@ -66,7 +65,7 @@ topojsonize:
 
 deploy:
 
-	npm run timestamp;
+	npm run timestamp ${year} ${month} ${day}
 	cp output/snowtotals.topojson src/assets/snowtotals.topojson
 
 
