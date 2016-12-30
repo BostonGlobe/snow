@@ -1,6 +1,7 @@
 // import Awesomplete from 'awesomplete'
 import _ from 'lodash'
 
+import pakage from './../../package.json'
 import { select } from './utils/dom.js'
 // import search from './search.js'
 
@@ -23,7 +24,7 @@ const startMap = (url) => {
 	const map = L.Mapzen.map(mapElement, {
 		center: [42.2040, -71.8674],
 		zoom: 7,
-		scene: 'assets/scene.yaml',
+		scene: 'assets/scene.yaml?q=' + pakage.version,
 		minZoom: 2,
 		maxZoom: 10,
 	})
