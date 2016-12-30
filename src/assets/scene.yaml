@@ -17,6 +17,7 @@ layers:
       data: { source: _snowtotals }
       draw:
         text:
+          buffer: [[2, 24px], [10, 4px]]
           style: custom-labels
           text_source: |
             function() {
