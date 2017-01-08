@@ -24,10 +24,7 @@ layers:
             }
           buffer: [[2, 24px], [10, 36px]]
           style: custom-labels
-          text_source: |
-            function() {
-              return feature.DN > 0.001 ? feature.DN : ''
-            }
+          text_source: DN
           font:
             weight: bold
             fill: black
@@ -40,22 +37,19 @@ layers:
           color: |
             function() {
               var DN = feature.DN
+
               var color =
-                DN < 0.100 ? '#e1ebf4' :
-                DN < 0.500 ? '#ced9ea' :
-                DN < 1.000 ? '#bdc6e1' :
-                DN < 2.000 ? '#afb4d7' :
-                DN < 4.000 ? '#a3a1cd' :
-                DN < 6.000 ? '#998ec3' :
-                DN < 8.000 ? '#917ab8' :
-                DN < 11.00 ? '#8b65ad' :
-                DN < 14.00 ? '#86529b' :
-                DN < 17.00 ? '#7a4086' :
-                DN < 20.00 ? '#6c3172' :
-                DN < 24.00 ? '#5a265c' :
-                DN < 28.00 ? '#471d47' :
-                DN < 32.00 ? '#321531' :
-                DN < 36.00 ? '#1e0f1d' :
-                '#000000';
+                DN < 1.00 ? "#d8e2ef" :
+                DN < 2.00 ? "#bfc9e2" :
+                DN < 4.00 ? "#aaadd3" :
+                DN < 6.00 ? "#9b92c5" :
+                DN < 8.00 ? "#8f74b6" :
+                DN < 10.0 ? "#88569f" :
+                DN < 15.0 ? "#783d83" :
+                DN < 20.0 ? "#612a64" :
+                DN < 25.0 ? "#451b44" :
+                DN < 30.0 ? "#271225" :
+                "#000000";
+
               return color;
             }
