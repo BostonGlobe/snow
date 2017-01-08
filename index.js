@@ -1,11 +1,26 @@
-import fs from 'fs-extra'
-import _ from 'lodash'
-import moment from 'moment-timezone'
+import request from 'request-promise-native'
 
-const [, , year, month, day] = process.argv
+request('http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml')
+	.then(body => {
 
-let topo = fs.readJsonSync('./output/snowtotals.topojson')
+		console.log(body)
 
-topo.timestamp = [year, month, day].join('-')
+	})
+	.catch(error => {
 
-fs.writeJsonSync('./output/snowtotals.topojson', topo)
+		console.error(error)
+		process.exit(1)
+
+	})
+
+// import fs from 'fs-extra'
+// import _ from 'lodash'
+// import moment from 'moment-timezone'
+
+// const [, , year, month, day] = process.argv
+
+// let topo = fs.readJsonSync('./output/snowtotals.topojson')
+
+// topo.timestamp = [year, month, day].join('-')
+
+// fs.writeJsonSync('./output/snowtotals.topojson', topo)

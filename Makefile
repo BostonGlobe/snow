@@ -54,6 +54,13 @@ presimplify:
 
 
 
+reports:
+
+	cd output; \
+		curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > snow.kml;
+
+
+
 topojsonize:
 
 	# Topojsonize and simplify the GeoJSON
@@ -79,10 +86,6 @@ color:
 
 
 
-all: clean_all download preprocess polygonize presimplify topojsonize deploy
-
-
-
 input: clean_all download
 
 
@@ -92,11 +95,10 @@ output:
 	make preprocess
 	make polygonize
 	make presimplify
+	make reports
 	make topojsonize
 	make deploy
 
 
 
-post-lite:
-	make presimplify
-	make topojsonize
+all: input output
