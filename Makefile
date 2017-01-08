@@ -15,14 +15,15 @@ clean:
 download:
 
 	# Download last 24 hours of snowfall
-	curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Fpng&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > input/snow.tif;
+	curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > input/snow.tif;
 
 
 
 preprocess:
 
-	# Use raster arithmetic to 'promote' less-than-1 values to their own integer
-	gdal_calc.py -A input/snow.tif --outfile=output/integered.tif --calc="(A*1000)";
+	# Use raster arithmetic to compute DN as R+G+B
+	cd input; \
+		gdal_calc.py -A snow.tif -B snow.tif -C snow.tif --A_band=1 --B_band=2 --C_band=3 --outfile=../output/integered.tif --calc="A+B+C"
 
 
 
@@ -38,7 +39,7 @@ presimplify:
 	# Simplify the shapefile by using a threshold scale
 	shp2json output/snowtotals.shp | \
 	ndjson-split 'd.features' | \
-	ndjson-map -r d3 'd.properties.DN = d3.scaleThreshold().domain([0*1000,0.001*1000,0.1*1000,0.5*1000,1*1000,2*1000,4*1000,6*1000,8*1000,11*1000,14*1000,17*1000,20*1000,24*1000,28*1000,32*1000,36*1000]).range([0,0,0.001,0.1,0.5,1,2,4,6,8,11,14,17,20,24,28,32,36])(d.properties.DN), d' | \
+	ndjson-map -r d3 'd.properties.DN = d3.scaleOrdinal().domain([0,64,229,167,11,142,208,247,192,148,169,216]).range([0,1,2,3,4,5,6,7,8,9,10,11])(d.properties.DN), d' | \
 	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", features: []}' \
 	> output/allSnowtotals.geojson;
 
@@ -91,8 +92,8 @@ output:
 	make preprocess
 	make polygonize
 	make presimplify
-	make topojsonize
-	make deploy
+	# make topojsonize
+	# make deploy
 
 
 
