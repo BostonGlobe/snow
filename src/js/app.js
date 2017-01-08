@@ -29,7 +29,7 @@ const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/ass
 startMap(url)
 
 const jsTime = select('.js-time')
-jsTime.innerHTML = 'Jan. 8, 2:29 am'
+jsTime.innerHTML = 'Jan. 8, 8:55 am'
 
 // request.json(url, (error, json) => {
 
