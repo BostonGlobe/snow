@@ -66,7 +66,7 @@ topojsonize:
 
 deploy:
 
-	npm run timestamp ${year} ${month} ${day}
+	# npm run timestamp ${year} ${month} ${day}
 	cp output/snowtotals.topojson src/assets/snowtotals.topojson
 
 

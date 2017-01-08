@@ -23,45 +23,48 @@ if (document.querySelectorAll('.g-header__share').length) {
 	})
 }
 
-// const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
-const url = '/assets/snowtotals.topojson?q=' + Date.now()
+const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
+// const url = '/assets/snowtotals.topojson?q=' + Date.now()
 
 startMap(url)
 
-request.json(url, (error, json) => {
+const jsTime = select('.js-time')
+jsTime.innerHTML = 'Jan. 7, 10:22 pm'
 
-	if (error) {
+// request.json(url, (error, json) => {
 
-		console.error(error)
+// 	if (error) {
 
-	} else {
+// 		console.error(error)
 
-		// Get the DOM element we are going to modify.
-		const jsTime = select('.js-time')
+// 	} else {
 
-		const { timestamp } = json
+// 		// Get the DOM element we are going to modify.
+// 		const jsTime = select('.js-time')
 
-		if (timestamp) {
+// 		const { timestamp } = json
 
-			// Split out timestamp string into various parts.
-			const [year, month, date ] = timestamp.split(/-|\s|:/)
+// 		if (timestamp) {
 
-			// Create a dateline-wrapped date.
-			const wrapped = dateline(new Date(year, month - 1, date))
+// 			// Split out timestamp string into various parts.
+// 			const [year, month, date ] = timestamp.split(/-|\s|:/)
 
-			// Create the human-readable string.
-			const human = wrapped.getAPDate()
+// 			// Create a dateline-wrapped date.
+// 			const wrapped = dateline(new Date(year, month - 1, date))
 
-			// Set its innerHTML and datetime attribute.
-			jsTime.innerHTML = human
-			jsTime.setAttribute('datetime', timestamp)
+// 			// Create the human-readable string.
+// 			const human = wrapped.getAPDate()
 
-		} else {
+// 			// Set its innerHTML and datetime attribute.
+// 			jsTime.innerHTML = human
+// 			jsTime.setAttribute('datetime', timestamp)
 
-			jsTime.innerHTML = 'No data available'
+// 		} else {
 
-		}
+// 			jsTime.innerHTML = 'No data available'
 
-	}
+// 		}
 
-})
+// 	}
+
+// })
