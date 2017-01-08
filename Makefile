@@ -39,7 +39,7 @@ presimplify:
 	# Simplify the shapefile by using a threshold scale
 	shp2json output/snowtotals.shp | \
 	ndjson-split 'd.features' | \
-	ndjson-map -r d3 'd.properties.DN = d3.scaleOrdinal().domain([0,64,229,167,11,142,208,247,192,148,169,216]).range([0,1,2,3,4,5,6,7,8,9,10,11])(d.properties.DN), d' | \
+	ndjson-map -r d3 'd.properties.DN = d3.scaleOrdinal().domain([0,64,229,167,11,142,208,247,192,148,169,216]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
 	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", features: []}' \
 	> output/allSnowtotals.geojson;
 
@@ -58,7 +58,7 @@ topojsonize:
 
 	# Topojsonize and simplify the GeoJSON
 	geo2topo output/snowtotals.geojson | \
-		toposimplify -s 0.0000001 -f | \
+		toposimplify -s 0.00000001 -f | \
 		topoquantize 10000 \
 		> output/snowtotals.topojson;
 
@@ -92,8 +92,8 @@ output:
 	make preprocess
 	make polygonize
 	make presimplify
-	# make topojsonize
-	# make deploy
+	make topojsonize
+	make deploy
 
 
 
