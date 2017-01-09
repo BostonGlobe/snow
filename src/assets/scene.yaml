@@ -13,24 +13,26 @@ styles:
 
 layers:
 
-    snowtotals:
+    reports:
       data: { source: _snowtotals }
       draw:
-
         text:
           priority: |
             function() {
-              return 100 / feature.DN 
+              return 100 / feature.amount
             }
           buffer: [[2, 24px], [10, 36px]]
           style: custom-labels
-          text_source: DN
+          text_source: amount
           font:
             weight: bold
             fill: black
             stroke: { color: white, width: 4 }
-            size: [[2, 0.75em], [10, 1.75em]]
+            size: [[2, 0.75em], [10, 2em]]
 
+    snowtotals:
+      data: { source: _snowtotals }
+      draw:
         polygons:
           interactive: true
           order: 383
