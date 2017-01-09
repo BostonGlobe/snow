@@ -30,7 +30,7 @@ const startMap = (url) => {
 	})
 
 	// Set attribution.
-	map.attributionControl.addAttribution('Snowfall analysis <a href="http://www.weather.gov/erh/hydromet">NWS ERH</a>')
+	map.attributionControl.addAttribution('<a href="http://www.weather.gov/erh/hydromet">NWS</a>')
 
 	// Add locator button.
 	const locator = L.Mapzen.locator()

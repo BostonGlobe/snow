@@ -45,53 +45,24 @@ request.json(url, (error, json) => {
 
 		const reports = _.get(json, 'objects.reports.geometries', [])
 
-		const test = _(reports)
-			.map('properties')
-			.map(v => {
-
-				const timeParts = v.time.split(/:| /)
-				const hours = +timeParts[0]
-				const minutes = +timeParts[1]
-				const mode = timeParts[2]
-
-				const dateParts = v.date.split('/')
-				const month = +dateParts[0] - 1
-				const day = +dateParts[1]
-				const year = +dateParts[2]
-
-				let finalHours = hours
-				if (mode === 'AM' && hours === 12) finalHours = hours - 12
-				if (mode === 'PM' && hours < 12) finalHours = hours + 12
-
-				return {
-					...v,
-					finalHours,
-					hours,
-					minutes,
-					mode,
-					timestamp: new Date(year, month, day, finalHours, minutes),
-				}
-
-			})
-			.sortBy('timestamp')
+		const [timestamp] = _(reports)
+			.map('properties.timestamp')
+			.filter()
 			.value()
 
-		console.log(JSON.stringify(test, null, 2))
+		if (timestamp) {
 
-// 			// Split out timestamp string into various parts.
-// 			const [year, month, date ] = timestamp.split(/-|\s|:/)
+			// Create a dateline-wrapped date.
+			const wrapped = dateline(new Date(+timestamp))
 
-// 			// Create a dateline-wrapped date.
-// 			const wrapped = dateline(new Date(year, month - 1, date))
+			// Create the human-readable string.
+			const human = [wrapped.getAPDate(), wrapped.getAPTime()].join(', ')
 
-// 			// Create the human-readable string.
-// 			const human = wrapped.getAPDate()
+			// Set its innerHTML and datetime attribute.
+			jsTime.innerHTML = human
+			jsTime.setAttribute('datetime', timestamp)
 
-// 			// Set its innerHTML and datetime attribute.
-// 			jsTime.innerHTML = human
-// 			jsTime.setAttribute('datetime', timestamp)
-
-// 		} else {
+		}
 
 	}
 
