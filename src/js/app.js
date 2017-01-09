@@ -1,5 +1,6 @@
 import * as request from 'd3-request'
 import dateline from 'dateline'
+import _ from 'lodash'
 
 import { select } from './utils/dom.js'
 import setPathCookie from './utils/setPathCookie.js'
@@ -23,28 +24,59 @@ if (document.querySelectorAll('.g-header__share').length) {
 	})
 }
 
-const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
-// const url = '/assets/snowtotals.topojson?q=' + Date.now()
+// const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
+const url = '/assets/snowtotals.topojson?q=' + Date.now()
 
 startMap(url)
 
-const jsTime = select('.js-time')
-jsTime.innerHTML = 'Jan. 8, 5:04 pm'
+// const jsTime = select('.js-time')
+// jsTime.innerHTML = 'Jan. 8, 5:04 pm'
 
-// request.json(url, (error, json) => {
+request.json(url, (error, json) => {
 
-// 	if (error) {
+	if (error) {
 
-// 		console.error(error)
+		console.error(error)
 
-// 	} else {
+	} else {
 
-// 		// Get the DOM element we are going to modify.
-// 		const jsTime = select('.js-time')
+		// Get the DOM element we are going to modify.
+		const jsTime = select('.js-time')
 
-// 		const { timestamp } = json
+		const reports = _.get(json, 'objects.reports.geometries', [])
 
-// 		if (timestamp) {
+		const test = _(reports)
+			.map('properties')
+			.map(v => {
+
+				const timeParts = v.time.split(/:| /)
+				const hours = +timeParts[0]
+				const minutes = +timeParts[1]
+				const mode = timeParts[2]
+
+				const dateParts = v.date.split('/')
+				const month = +dateParts[0] - 1
+				const day = +dateParts[1]
+				const year = +dateParts[2]
+
+				let finalHours = hours
+				if (mode === 'AM' && hours === 12) finalHours = hours - 12
+				if (mode === 'PM' && hours < 12) finalHours = hours + 12
+
+				return {
+					...v,
+					finalHours,
+					hours,
+					minutes,
+					mode,
+					timestamp: new Date(year, month, day, finalHours, minutes),
+				}
+
+			})
+			.sortBy('timestamp')
+			.value()
+
+		console.log(JSON.stringify(test, null, 2))
 
 // 			// Split out timestamp string into various parts.
 // 			const [year, month, date ] = timestamp.split(/-|\s|:/)
@@ -61,10 +93,6 @@ jsTime.innerHTML = 'Jan. 8, 5:04 pm'
 
 // 		} else {
 
-// 			jsTime.innerHTML = 'No data available'
+	}
 
-// 		}
-
-// 	}
-
-// })
+})
