@@ -59,13 +59,17 @@ presimplify:
 reports:
 
 	npm run reports
+	cd output; \
+		cat reports.json | \
+		in2csv -f json | \
+		csvjson --lat lat --lon lon > reports.geojson;
 
 
 
 topojsonize:
 
 	# Topojsonize and simplify the GeoJSON
-	geo2topo output/snowtotals.geojson | \
+	geo2topo output/reports.geojson output/snowtotals.geojson | \
 		toposimplify -s 0.00000001 -f | \
 		topoquantize 10000 \
 		> output/snowtotals.topojson;
@@ -74,7 +78,6 @@ topojsonize:
 
 deploy:
 
-	# npm run timestamp ${year} ${month} ${day}
 	cp output/snowtotals.topojson src/assets/snowtotals.topojson
 
 

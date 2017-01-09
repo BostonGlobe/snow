@@ -7,7 +7,7 @@ const xml = fs.readFileSync('./input/snow.kml', 'utf8')
 
 parseString(xml, (error, result) => {
 
-	if (!error) {
+	if (error) {
 
 		console.error(error)
 		process.exit(1)
