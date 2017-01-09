@@ -15,7 +15,9 @@ clean:
 download:
 
 	# Download last 24 hours of snowfall
-	curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > input/snow.tif;
+	cd input; \
+		curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > snow.tif; \
+		curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > snow.kml;
 
 
 
@@ -56,8 +58,7 @@ presimplify:
 
 reports:
 
-	cd output; \
-		curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > snow.kml;
+	npm run reports
 
 
 
