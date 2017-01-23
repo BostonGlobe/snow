@@ -14,7 +14,7 @@ Please note: do not reproduce Boston Globe logos or fonts without written permis
 
 ### Running the cronjob
 
-- Every 15 minutes, run `make all year=YYYY month=MM day=DD` (e.g. `make all year=2016 month=12 day=27`). This will generate `output/snowtotals.topojson`. Publish this to production.
+- Every 15 minutes, run `make all`. This will generate `output/snowtotals.topojson`. Publish this to production.
 
 ## Project setup
 Clone repo and run `yarn`.
