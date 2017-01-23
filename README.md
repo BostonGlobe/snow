@@ -11,7 +11,6 @@ Please note: do not reproduce Boston Globe logos or fonts without written permis
 - Run `sudo pip install csvkit`
 - Run `npm install -g shapefile d3 ndjson-cli mapshaper topojson-server topojson-simplify topojson-client`
 - Run `brew install gdal`
-- Finally, note that this project depends on `http://jenkins.boston.com/cron/job/snowfall-scraper/`. Make sure that is successful before you try this one.
 
 ### Running the cronjob
 
