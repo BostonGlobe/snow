@@ -4,17 +4,18 @@ This project was generated with [slush-globeapp](https://github.com/BostonGlobe/
 
 Please note: do not reproduce Boston Globe logos or fonts without written permission.
 
-## Cronjob setup
+## Cronjob
 
-### Install dependencies
+### Setup
 
 - Run `sudo pip install csvkit`
 - Run `npm install -g shapefile d3 ndjson-cli mapshaper topojson-server topojson-simplify topojson-client`
 - Run `brew install gdal`
 
-### Running the cronjob
+### Run
 
-- Every 15 minutes, run `make all`. This will generate `output/snowtotals.topojson`. Publish this to production.
+- Every 15 minutes, run `make all`. This will generate `output/snowtotals.topojson`, if there is weather data. Publish this to production.
+- If the make task errors out, it most likely means there is no snowfall data. Do nothing.
 
 ## Project setup
 Clone repo and run `yarn`.
