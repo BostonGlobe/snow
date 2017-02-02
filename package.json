@@ -1,10 +1,9 @@
 {
   "name": "slush-globeapp-project",
   "version": "0.0.17",
-  "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "reports": "babel-node index.js",
+    "reports": "babel-node src/getReports.js",
 		"doc": "indoc -c indoc.json"
   },
   "dependencies": {
