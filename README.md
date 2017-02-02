@@ -20,10 +20,6 @@ Please note: do not reproduce Boston Globe logos or fonts without written permis
 ## Project setup
 Clone repo and run `yarn`.
 
-If pulling from google or methode, run the command(s) below to stay up-to-date:
-
-`gulp fetch-google` and `gulp fetch-methode`.
-
 To start the local server, run `gulp`.
 
 ## Deploy
