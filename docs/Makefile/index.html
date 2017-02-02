@@ -1,0 +1,311 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Makefile</title>
+    <link rel="stylesheet" href="./../public/style.css" />
+    <link rel="icon" type="image/png" href="./../public/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./../public/jquery.min.js"></script>
+    <script src="./../public/script.js"></script>
+  </head>
+  <body class="code">
+    
+    <main id="sections">
+
+      <!-- The header -->
+
+        
+      <section class="section header files-hidden" id="header">
+
+        <aside class="comment">
+
+          <header>
+
+            <div class="file-path">
+              
+              
+              <a id="project-overview" href="./.." title="Project Overview">snow<span id="version"></span></a>
+              
+              <div class="files-menu">
+                <span id="filename" title="Makefile">Makefile</span>
+                
+              
+                <ul class="files hidable">
+                  
+                
+                  
+                </ul>
+                
+              </div>
+                
+            </div>
+
+            <div class="spacer"></div>
+            
+            
+          </header>
+            
+        </aside>
+
+        
+        <div class="code empty">
+        </div>
+
+      </section>
+
+      <!-- The main code section -->
+      
+      <section class="section">
+
+  
+  <aside class="comment empty">
+    <div class="text markdown"></div>
+  </aside>
+
+  <div class="code">
+    <pre><code>clean_all:
+
+	make clean <span class="hljs-keyword">dir</span>=<span class="hljs-keyword">input</span>
+	make clean <span class="hljs-keyword">dir</span>=output
+
+
+
+clean:
+
+	<span class="hljs-keyword">rm</span> -rf <span class="hljs-variable">${dir}</span>;
+	<span class="hljs-keyword">mkdir</span> <span class="hljs-variable">${dir}</span>;
+
+
+
+download:</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Download a GeoTiff of the last 24 hours of snowfall.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	curl <span class="hljs-symbol">'http</span>://mapserv.wxinfoicebox.com/cgi-bin/mapserv?<span class="hljs-keyword">map</span>=/data/mapserver/mapfiles/eventimage.<span class="hljs-keyword">map</span>&amp;SRS=EPSG%<span class="hljs-number">3</span>A4326&amp;SERVICE=WMS&amp;REQUEST=GetMap&amp;VERSION=<span class="hljs-number">1.1</span>.<span class="hljs-number">1</span>&amp;LAYERS=snow&amp;STYLES=&amp;FORMAT=image%<span class="hljs-number">2</span>Ftiff&amp;TRANSPARENT=<span class="hljs-literal">true</span>&amp;HEIGHT=<span class="hljs-number">2000</span>&amp;<span class="hljs-literal">WIDTH</span>=<span class="hljs-number">2000</span>&amp;PERIOD=<span class="hljs-number">24</span>&amp;BBOX=-<span class="hljs-number">85.5</span>,<span class="hljs-number">31.0</span>,-<span class="hljs-number">67.0</span>,<span class="hljs-number">47.5</span>' &gt; input/snow.tif;</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Download total snowfall reports for the last 24 hours as a KML file.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	curl <span class="hljs-string">'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml'</span> &gt; <span class="hljs-keyword">input</span>/snow.kml<span class="hljs-comment">;</span>
+
+
+
+preprocess:</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Using raster arithmetic, join the RGB bands into one.
+This creates a unique color.
+Note that this &#39;hack&#39; works because the R+G+B combination is unique;
+it wouldn&#39;t work if two different colors added up to the same color.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code><span class="hljs-comment">	cd</span> <span class="hljs-comment">input;</span> <span class="hljs-comment">\</span>
+<span class="hljs-comment">		gdal_calc</span><span class="hljs-string">.</span><span class="hljs-comment">py</span> <span class="hljs-literal">-</span><span class="hljs-comment">A</span> <span class="hljs-comment">snow</span><span class="hljs-string">.</span><span class="hljs-comment">tif</span> <span class="hljs-literal">-</span><span class="hljs-comment">B</span> <span class="hljs-comment">snow</span><span class="hljs-string">.</span><span class="hljs-comment">tif</span> <span class="hljs-literal">-</span><span class="hljs-comment">C</span> <span class="hljs-comment">snow</span><span class="hljs-string">.</span><span class="hljs-comment">tif</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">A_band=1</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">B_band=2</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">C_band=3</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">outfile=</span><span class="hljs-string">.</span><span class="hljs-string">.</span><span class="hljs-comment">/output/integered</span><span class="hljs-string">.</span><span class="hljs-comment">tif</span> <span class="hljs-literal">-</span><span class="hljs-literal">-</span><span class="hljs-comment">calc="A</span><span class="hljs-literal">+</span><span class="hljs-comment">B</span><span class="hljs-literal">+</span><span class="hljs-comment">C"</span>
+
+
+
+<span class="hljs-comment">polygonize:</span></code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Convert the GeoTiff into polygons.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	gdal_polygonize.py <span class="hljs-keyword">output</span>/integered.tif -f <span class="hljs-string">"ESRI Shapefile"</span> <span class="hljs-keyword">output</span>/snowtotals.shp;
+
+
+
+presimplify:</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Convert the snowtotals shapefile to GeoJSON,
+convert the GeoJSON to newline-delimited JSON,
+use d3.scaleOrdinal to convert the original snowfall colors (calculated
+above as R+G+B) to a snowfall number (in inches),
+and gather up the newline-delimited JSON stream to GeoJSON.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	shp2json output/snowtotals.shp | \
+	ndjson-<span class="hljs-built_in">split</span> 'd.<span class="hljs-built_in">features</span>' | \
+	ndjson-<span class="hljs-built_in">map</span> -r d3 'd.<span class="hljs-built_in">properties</span>.DN = d3.scaleOrdinal().<span class="hljs-built_in">domain</span>([<span class="hljs-number">0</span>,<span class="hljs-number">64</span>,<span class="hljs-number">229</span>,<span class="hljs-number">167</span>,<span class="hljs-number">11</span>,<span class="hljs-number">142</span>,<span class="hljs-number">208</span>,<span class="hljs-number">247</span>,<span class="hljs-number">192</span>,<span class="hljs-number">148</span>,<span class="hljs-number">169</span>,<span class="hljs-number">216</span>]).<span class="hljs-built_in">range</span>([<span class="hljs-number">0</span>,<span class="hljs-number">0.1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">4</span>,<span class="hljs-number">6</span>,<span class="hljs-number">8</span>,<span class="hljs-number">10</span>,<span class="hljs-number">15</span>,<span class="hljs-number">20</span>,<span class="hljs-number">25</span>,<span class="hljs-number">30</span>])(d.<span class="hljs-built_in">properties</span>.DN), d' | \
+	ndjson-reduce 'p.<span class="hljs-built_in">features</span>.<span class="hljs-built_in">push</span>(d), p' '{type: <span class="hljs-string">"FeatureCollection"</span>, <span class="hljs-built_in">features</span>: []}' \
+	&gt; output/allSnowtotals.geojson;</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Use ogr2ogr to validate geometries and remove polygons with no snowfall.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	<span class="hljs-built_in">cd</span> output; \
+		ogr2ogr <span class="hljs-_">-f</span> <span class="hljs-string">"GeoJSON"</span> snowtotals-valid.geojson allSnowtotals.geojson \
+		-dialect sqlite -sql <span class="hljs-string">"select ST_MakeValid(geometry) as geometry, * from allSnowtotals where DN &gt; 0"</span></code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Use mapshaper to merge polygons of same snowfall value.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	cd output<span class="hljs-comment">; \</span>
+		mapshaper snowtotals-valid.geojson snap -<span class="hljs-keyword">dissolve </span>DN -o snowtotals.geojson<span class="hljs-comment">;</span>
+<span class="hljs-symbol">
+
+
+reports:</span></code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Parse downloaded XML reports into JSON,
+and use csvkit to convert to GeoJSON.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	<span class="hljs-built_in">npm</span> run reports
+	cd output; <span class="hljs-string">\</span>
+		cat reports.json | <span class="hljs-string">\</span>
+		in2csv -f json | <span class="hljs-string">\</span>
+		csvjson --lat lat --lon lon &gt; reports.geojson;
+
+
+
+topojsonize:</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Combine reports and snowfall polygons into one topojson file,
+and simplify and quantize them.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	geo2topo <span class="hljs-keyword">output</span>/reports.geojson <span class="hljs-keyword">output</span>/snowtotals.geojson | \
+		toposimplify -s <span class="hljs-number">0.00000001</span> -f | \
+		topoquantize <span class="hljs-number">10000</span> \
+		&gt; <span class="hljs-keyword">output</span>/snowtotals.topojson;
+
+
+
+deploy:</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Copy final topojson file to src/assets.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	<span class="hljs-keyword">cp</span> output/snowtotals.topojson src/assets/snowtotals.topojson
+
+
+
+inpu<span class="hljs-variable">t:</span> clean_all download
+
+
+
+outpu<span class="hljs-variable">t:</span>
+	<span class="hljs-keyword">make</span> clean dir=output
+	<span class="hljs-keyword">make</span> preprocess
+	<span class="hljs-keyword">make</span> polygonize
+	<span class="hljs-keyword">make</span> presimplify
+	<span class="hljs-keyword">make</span> reports
+	<span class="hljs-keyword">make</span> topojsonize
+	<span class="hljs-keyword">make</span> deploy
+
+
+
+<span class="hljs-keyword">al</span><span class="hljs-variable">l:</span> <span class="hljs-built_in">input</span> output</code></pre>
+  </div>
+
+  
+</section>
+
+      
+      
+      <section class="section footer" id="footer">
+        
+        <aside class="comment">
+          <span class="content project-copyright">&copy; Copyright 2017 The Boston Globe.</span>
+        </aside>
+
+        <div class="code">
+          <span class="content page-generation-time">Generated Thu, 02 Feb 2017 22:52:53 GMT</span>
+        </div>
+        
+      </section>
+      
+    </main>
+
+  </body>
+</html>
+

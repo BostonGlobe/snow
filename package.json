@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "reports": "babel-node src/getReports.js",
-    "doc": "indoc -c data/indoc.json"
+    "doc": "rimraf docs && indoc -c data/indoc.json"
   },
   "dependencies": {
     "archieml": "0.3.1",
@@ -47,6 +47,7 @@
     "moment-timezone": "^0.5.11",
     "promis": "1.1.4",
     "require-dir": "0.3.0",
+    "rimraf": "^2.5.4",
     "run-sequence": "1.2.1",
     "shelljs": "0.7.0",
     "webpack": "1.13.1",

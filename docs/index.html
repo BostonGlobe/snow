@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+  <head>
+    <title>snow</title>
+    <link rel="stylesheet" href=".//public/style.css" />
+    <link rel="icon" type="image/png" href=".//public/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src=".//public/jquery.min.js"></script>
+    <script src=".//public/script.js"></script>
+  </head>
+  <body class="index markdown">
+    
+    <main id="sections">
+
+      <!-- The header -->
+
+      <section class="section header files-hidden markdown" id="header">
+        
+
+        <aside class="comment">
+
+          <header>
+
+            <div class="file-path">
+              
+              <span id="project-overview"><span class="name">snow</span><span id="version"></span></span>
+              
+              
+              <div class="files-menu">
+                <span id="filename" title="snow">snow</span>
+                
+                <ul class="files index">
+              
+                  
+                  
+<li class="file">
+  
+<a href="Makefile" title="Makefile">
+    
+<span class="language" style="background-color: #f0f"></span>
+
+
+<span class="filename">Makefile</span>
+
+</a>
+
+</li>
+
+                  
+                </ul>
+                
+              </div>
+                
+            </div>
+
+            <div class="spacer"></div>
+            
+            <ul class="links">
+
+              
+              
+            </ul>
+            
+          </header>
+            
+        </aside>
+
+        <div class="code">
+          <div class="markdown"><h1 id="snow">snow</h1><p>This project was generated with <a href="https://github.com/BostonGlobe/slush-globeapp" title="">slush-globeapp</a>. Consult its <a href="https://github.com/BostonGlobe/slush-globeapp" title="">README</a> for more information.</p>
+<p>Please note: do not reproduce Boston Globe logos or fonts without written permission.</p>
+<h2 id="cronjob">Cronjob</h2><h3 id="setup">Setup</h3><ul>
+<li>Run <code>sudo pip install csvkit</code></li>
+<li>Run <code>npm install -g shapefile d3 ndjson-cli mapshaper topojson-server topojson-simplify topojson-client</code></li>
+<li>Run <code>brew install gdal</code></li>
+</ul>
+<h3 id="run">Run</h3><ul>
+<li>Every 15 minutes, run <code>make all -B</code>. This will generate <code>output/snowtotals.topojson</code>, if there is weather data. Publish this to production.</li>
+<li>If the make task errors out, it most likely means there is no snowfall data. Do nothing.</li>
+</ul>
+<h2 id="project-setup">Project setup</h2><p>Clone repo and run <code>yarn</code>.</p>
+<p>To start the local server, run <code>gulp</code>.</p>
+<h2 id="deploy">Deploy</h2><h4 id="step-1-make-a-project-folder-on-apps">Step 1: make a project folder on apps</h4><ul>
+<li>Either connect to the apps server (<code>smb://legacydocroot.globe.com/web/bgapps/html/</code>) or connect to shell and navigate to your directory (<code>cd /web/bgapps/html/[section]/graphics/[year]/[month]/</code>).</li>
+<li>If you&#39;re using the finder, simply make a new folder in the correct directory with your project name (reference <code>config.json</code> for your project name).</li>
+<li>If you&#39;re using terminal, <code>mkdir [your-project-name]</code></li>
+</ul>
+<h4 id="step-2-gulp">Step 2: gulp</h4><ul>
+<li>Run <code>gulp prod -u username</code> to deploy. Outputs files into <code>dist/prod</code> folder in root.</li>
+<li>Optional: Use the flag <code>--html</code> to only upload the index.html file (use this if you have no updates to assets and want faster upload)</li>
+<li>Your graphic is now internally visible at <a href="http://dev.apps.bostonglobe.com/[section]/graphics/[year]/[month]/[graphic-name" title="">http://dev.apps.bostonglobe.com/[section]/graphics/[year]/[month]/[graphic-name</a>].</li>
+</ul>
+<h4 id="step-3-publish-assets">Step 3: publish assets</h4><ul>
+<li>In Terminal, connect to shell (your username is usually first initial last name): <code>ssh rgoldenberg@shell.boston.com</code>.</li>
+<li>Navigate to your graphic directory: <code>cd /web/bgapps/html/[section]/graphics/[year]/[month]/[graphic-name]</code>.</li>
+<li>Run the command <code>upload *</code> in the root <strong>and</strong> each subdirectroy. (ex. <code>cd css</code>, then <code>upload *</code> to upload all files in that folder).</li>
+</ul>
+<h3 id="public-url">Public url</h3><ul>
+<li><strong>https</strong>://apps.bostonglobe.com/[section]/graphics/[year]/[month]/[graphic-name]</li>
+<li>A zipped archive is also pushed to apps. It has the full unminified code for the future when gulp and stuff are fossils.</li>
+</ul>
+</div>
+        </div>
+        
+
+      </section>
+
+      <!-- The main code section -->
+      
+      <section class="section footer" id="footer">
+        
+        <aside class="comment">
+          <span class="content project-copyright">&copy; Copyright 2017 The Boston Globe.</span>
+        </aside>
+
+        <div class="code">
+          <span class="content page-generation-time">Generated Thu, 02 Feb 2017 22:52:53 GMT</span>
+        </div>
+        
+      </section>
+      
+    </main>
+
+  </body>
+</html>
+
