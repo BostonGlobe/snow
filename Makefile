@@ -14,16 +14,20 @@ clean:
 
 download:
 
-	# Download last 24 hours of snowfall
-	cd input; \
-		curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > snow.tif; \
-		curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > snow.kml;
+	# Download a GeoTiff of the last 24 hours of snowfall.
+	curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > input/snow.tif;
+
+	# Download total snowfall reports for the last 24 hours.
+	curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > input/snow.kml;
 
 
 
 preprocess:
 
-	# Use raster arithmetic to compute DN as R+G+B
+	# Using raster arithmetic, join the RGB bands into one.
+	# This creates a unique color.
+	# Note that this 'hack' works because the R+G+B combination is unique;
+	# it wouldn't work if two different colors added up to the same color.
 	cd input; \
 		gdal_calc.py -A snow.tif -B snow.tif -C snow.tif --A_band=1 --B_band=2 --C_band=3 --outfile=../output/integered.tif --calc="A+B+C"
 
@@ -31,14 +35,18 @@ preprocess:
 
 polygonize:
 
-	# Polygonize the raster tif
+	# Convert the GeoTiff into polygons.
 	gdal_polygonize.py output/integered.tif -f "ESRI Shapefile" output/snowtotals.shp;
 
 
 
 presimplify:
 
-	# Simplify the shapefile by using a threshold scale
+	# Convert the snowtotals shapefile to GeoJSON,
+	# convert the GeoJSON to newline-delimited JSON,
+	# use d3.scaleOrdinal to convert the original snowfall colors (calculated
+	# above as R+G+B) to a snowfall number (in inches),
+	# and gather up the newline-delimited JSON stream to GeoJSON.
 	shp2json output/snowtotals.shp | \
 	ndjson-split 'd.features' | \
 	ndjson-map -r d3 'd.properties.DN = d3.scaleOrdinal().domain([0,64,229,167,11,142,208,247,192,148,169,216]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
