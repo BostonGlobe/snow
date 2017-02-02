@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "reports": "babel-node index.js"
+    "reports": "babel-node index.js",
+		"doc": "indoc -c indoc.json"
   },
   "dependencies": {
     "archieml": "0.3.1",
