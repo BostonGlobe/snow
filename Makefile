@@ -85,7 +85,7 @@ deploy:
 color:
 
 	# Color with pre-integer palette
-	gdaldem color-relief input/snow.tif data/color_ramp_default.txt output/input-colored.tif -alpha;
+	gdaldem color-relief input/snow.tif data/color_ramp.txt output/input-colored.tif -alpha;
 	convert output/input-colored.tif output/input-colored.png;
 
 
