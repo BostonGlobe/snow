@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "reports": "babel-node src/getReports.js",
-		"doc": "indoc -c indoc.json"
+    "doc": "indoc -c data/indoc.json"
   },
   "dependencies": {
     "archieml": "0.3.1",
@@ -17,7 +17,7 @@
     "babel-register": "6.9.0",
     "browser-sync": "2.13.0",
     "cheerio": "0.20.0",
-    "d3": "^4.4.0",
+    "d3": "^4.5.0",
     "d3-request": "^1.0.3",
     "dateline": "^2.1.0",
     "del": "2.2.0",
@@ -40,6 +40,7 @@
     "gulp-stylus": "2.4.0",
     "gulp-util": "3.0.7",
     "gulp-zip": "3.2.0",
+    "indoc": "^0.4.13",
     "jimp": "0.2.24",
     "json-loader": "0.5.4",
     "lodash": "^4.17.2",

@@ -1,19 +1,9 @@
 {
-	"name": "elections-2016",
+	"name": "snow",
 	"owners": "The Boston Globe",
 	"output": "docs",
 	"readme": "README.md",
 	"files": [
-		"client/index.js",
-		"common/containers/Race.js",
-		"common/containers/President.js",
-		"common/components/Timer.js",
-		"common/components/Tooltip.js",
-		"common/components/StateResultsTable.js",
-		"common/components/StateResultsTableRow.js",
-		"common/components/TownResultsTable.js",
-		"common/components/TownResultsTableRow.js",
-		"common/components/RaceSummary.js",
-		"common/components/MassMap.js"
+		"Makefile"
 	]
 }
