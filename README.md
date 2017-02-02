@@ -19,7 +19,7 @@ https://bostonglobe.github.io/snow/
 ### Run
 
 - Every 15 minutes, run `make all -B`. This will generate `output/snowtotals.topojson`, if there is weather data. Publish this to production.
-- If the make task errors out, it most likely means there is no snowfall data. Do nothing.
+- If the make task errors out, it most likely means there is no snowfall data. Try again in 15 minutes.
 
 ## Project setup
 Clone repo and run `yarn`.
