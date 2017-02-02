@@ -14,7 +14,7 @@ Please note: do not reproduce Boston Globe logos or fonts without written permis
 
 ### Run
 
-- Every 15 minutes, run `make all`. This will generate `output/snowtotals.topojson`, if there is weather data. Publish this to production.
+- Every 15 minutes, run `make all -B`. This will generate `output/snowtotals.topojson`, if there is weather data. Publish this to production.
 - If the make task errors out, it most likely means there is no snowfall data. Do nothing.
 
 ## Project setup
