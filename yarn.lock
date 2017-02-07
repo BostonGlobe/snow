@@ -3434,9 +3434,9 @@ indexof@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/indexof/-/indexof-0.0.1.tgz#82dc336d232b9062179d05ab3293a66059fd435d"
 
-indoc@^0.4.14:
-  version "0.4.14"
-  resolved "https://registry.yarnpkg.com/indoc/-/indoc-0.4.14.tgz#cec9ea43672efb924ec0e6b1d42f2662903c7d6d"
+indoc@^0.4.15:
+  version "0.4.15"
+  resolved "https://registry.yarnpkg.com/indoc/-/indoc-0.4.15.tgz#d2e0c76a19d5402ee47f8badb17903d2a9c01569"
   dependencies:
     fs-extra "^0.26.5"
     glob "^7.0.3"
