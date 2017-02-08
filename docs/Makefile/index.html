@@ -32,7 +32,20 @@
               
                 <ul class="files hidable">
                   
-                
+                  
+<li class="file">
+  
+<a href="../src/getReports.js" title="src/getReports.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/getReports.js</span>
+
+</a>
+
+</li>
+
                   
                 </ul>
                 
@@ -57,10 +70,13 @@
       
       <section class="section">
 
-  
-  <aside class="comment empty">
-    <div class="text markdown"></div>
+  <aside class="comment">
+    <div class="text markdown"><p>This Makefile is meant to run every 15 minutes.
+It requests weather data, both snow depth polygons and snow depth station
+reports, and updates <code>src/assets/snowtotals.topojson</code>.</p>
+</div>
   </aside>
+  
 
   <div class="code">
     <pre><code>clean_all:
@@ -221,15 +237,24 @@ and use csvkit to convert to GeoJSON.</p>
   
 
   <div class="code">
-    <pre><code>	<span class="hljs-built_in">npm</span> run reports
-	cd output; <span class="hljs-string">\</span>
-		cat reports.json | <span class="hljs-string">\</span>
-		in2csv -f json | <span class="hljs-string">\</span>
-		csvjson --lat lat --lon lon &gt; reports.geojson;
+    <pre><code>	<span class="hljs-attribute">n</span><span class="hljs-attribute">p</span><span class="hljs-attribute">m</span> <span class="hljs-attribute">r</span><span class="hljs-attribute">u</span><span class="hljs-attribute">n</span> <span class="hljs-attribute">r</span><span class="hljs-attribute">e</span><span class="hljs-attribute">p</span><span class="hljs-attribute">o</span><span class="hljs-attribute">r</span><span class="hljs-attribute">t</span><span class="hljs-attribute">s</span></code></pre>
+  </div>
 
+  
+</section>
+<section class="section">
 
+  <aside class="comment">
+    <div class="text markdown"><p>cd output; \
+    cat reports.json | \
+    in2csv -f json | \
+    csvjson --lat lat --lon lon &gt; reports.geojson;</p>
+</div>
+  </aside>
+  
 
-topojsonize:</code></pre>
+  <div class="code">
+    <pre><code><span class="hljs-symbol">topojsonize:</span></code></pre>
   </div>
 
   
@@ -299,7 +324,7 @@ outpu<span class="hljs-variable">t:</span>
         </aside>
 
         <div class="code">
-          <span class="content page-generation-time">Generated Tue, 07 Feb 2017 22:39:40 GMT</span>
+          <span class="content page-generation-time">Generated Wed, 08 Feb 2017 00:28:39 GMT</span>
         </div>
         
       </section>

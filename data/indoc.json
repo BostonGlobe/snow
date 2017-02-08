@@ -4,6 +4,7 @@
 	"output": "docs",
 	"readme": "README.md",
 	"files": [
-		"Makefile"
+		"Makefile",
+		"src/getReports.js"
 	]
 }

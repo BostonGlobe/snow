@@ -1,3 +1,9 @@
+# This Makefile is meant to run every 15 minutes.
+# It requests weather data, both snow depth polygons and snow depth station
+# reports, and updates `src/assets/snowtotals.topojson`.
+
+
+
 clean_all:
 
 	make clean dir=input
@@ -69,10 +75,10 @@ reports:
 	# Parse downloaded XML reports into JSON,
 	# and use csvkit to convert to GeoJSON.
 	npm run reports
-	cd output; \
-		cat reports.json | \
-		in2csv -f json | \
-		csvjson --lat lat --lon lon > reports.geojson;
+	# cd output; \
+	# 	cat reports.json | \
+	# 	in2csv -f json | \
+	# 	csvjson --lat lat --lon lon > reports.geojson;
 
 
 

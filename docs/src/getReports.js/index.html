@@ -1,0 +1,476 @@
+<!doctype html>
+<html>
+  <head>
+    <title>src/getReports.js</title>
+    <link rel="stylesheet" href="./../../public/style.css" />
+    <link rel="icon" type="image/png" href="./../../public/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./../../public/jquery.min.js"></script>
+    <script src="./../../public/script.js"></script>
+  </head>
+  <body class="code">
+    
+    <main id="sections">
+
+      <!-- The header -->
+
+        
+      <section class="section header files-hidden" id="header">
+
+        <aside class="comment">
+
+          <header>
+
+            <div class="file-path">
+              
+              
+              <a id="project-overview" href="./../.." title="Project Overview">snow<span id="version"></span></a>
+              
+              <div class="files-menu">
+                <span id="filename" title="src/getReports.js">src/getReports.js</span>
+                
+              
+                <ul class="files hidable">
+                  
+                  
+<li class="file">
+  
+<a href="../../Makefile" title="Makefile">
+    
+<span class="language" style="background-color: #f0f"></span>
+
+
+<span class="filename">Makefile</span>
+
+</a>
+
+</li>
+
+                  
+                </ul>
+                
+              </div>
+                
+            </div>
+
+            <div class="spacer"></div>
+            
+            
+          </header>
+            
+        </aside>
+
+        
+        <div class="code empty">
+        </div>
+
+      </section>
+
+      <!-- The main code section -->
+      
+      <section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>This module is invoked by the Makefile.
+It converts <code>snow.kml</code> to <code>snow.json</code>.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code><span class="hljs-keyword">import</span> fs <span class="hljs-keyword">from</span> <span class="hljs-string">'fs-extra'</span>
+<span class="hljs-keyword">import</span> { parseString } <span class="hljs-keyword">from</span> <span class="hljs-string">'xml2js'</span>
+<span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">'lodash'</span>
+<span class="hljs-keyword">import</span> moment <span class="hljs-keyword">from</span> <span class="hljs-string">'moment-timezone'</span></code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Read <code>snow.kml</code>,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code><span class="hljs-keyword">const</span> xml = fs.readFileSync(<span class="hljs-string">'./input/snow.kml'</span>, <span class="hljs-string">'utf8'</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>and try to parse it.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>parseString(xml, (error, result) =&gt; {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>If there was an error during parsing,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	<span class="hljs-keyword">if</span> (error) {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>log the error,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>		<span class="hljs-built_in">console</span>.error(error)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>and exit this process with code 1 (error).</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>		process.exit(<span class="hljs-number">1</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Otherwise,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	} <span class="hljs-keyword">else</span> {
+
+		<span class="hljs-keyword">try</span> {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>get all the placemarks.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>			<span class="hljs-keyword">const</span> placemarks = _.get(result, <span class="hljs-string">'kml.Document[0].Placemark'</span>, [])</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>For each placemark,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>			<span class="hljs-keyword">const</span> allData = _(placemarks)
+				.map(<span class="hljs-function"><span class="hljs-params">v</span> =&gt;</span> {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>get the latitude,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>					<span class="hljs-keyword">const</span> lat = _.get(v, <span class="hljs-string">'LookAt[0].latitude[0]'</span>, <span class="hljs-string">'0'</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>longitude,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>					<span class="hljs-keyword">const</span> lon = _.get(v, <span class="hljs-string">'LookAt[0].longitude[0]'</span>, <span class="hljs-string">'0'</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>and description.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>					<span class="hljs-keyword">const</span> description = _.get(v, <span class="hljs-string">'description[0]'</span>, <span class="hljs-string">''</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Try to extract snow depth and report time.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>					<span class="hljs-keyword">const</span> parts = description.match(<span class="hljs-regexp">/Snowfall: (.*) inches(.*)Time of Report:&lt;\/b&gt;(.*)&lt;br&gt;\n$/</span>) || []
+
+					<span class="hljs-keyword">const</span> [, amount, , datetime] = parts</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Return the bits we want.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>					<span class="hljs-keyword">return</span> {
+						<span class="hljs-attr">lat</span>: (+lat).toFixed(<span class="hljs-number">1</span>),
+						<span class="hljs-attr">lon</span>: (+lon).toFixed(<span class="hljs-number">1</span>),
+						<span class="hljs-attr">amount</span>: +amount,
+						datetime,
+					}
+
+				})</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Only keep reports that have a valid datetime.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>				.filter(<span class="hljs-string">'datetime'</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Use <code>moment.js</code> to parse the datetime string.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>				.map(<span class="hljs-function"><span class="hljs-params">v</span> =&gt;</span> ({
+					...v,
+					<span class="hljs-attr">unix</span>: moment(v.datetime.trim(), <span class="hljs-string">'h:mm A on MM/D/YYYY'</span>).valueOf(),
+				}))</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Group reports by lat/lon,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>				.groupBy(<span class="hljs-function"><span class="hljs-params">v</span> =&gt;</span> [v.lat, v.lon].join(<span class="hljs-string">''</span>))</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>and for each group,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>				.map(<span class="hljs-function"><span class="hljs-params">values</span> =&gt;</span></code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>return the first report (sorted by amount).</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>					_(values)
+						.orderBy([<span class="hljs-string">'amount'</span>], [<span class="hljs-string">'desc'</span>])
+						.head()
+				)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Next, order by time, descending.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>				.orderBy([<span class="hljs-string">'unix'</span>], [<span class="hljs-string">'desc'</span>])</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Only pick lat, lon, amount,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>				.map(<span class="hljs-function">(<span class="hljs-params">v, i</span>) =&gt;</span> ({
+					<span class="hljs-attr">lat</span>: v.lat,
+					<span class="hljs-attr">lon</span>: v.lon,
+					<span class="hljs-attr">amount</span>: v.amount,</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>and timestamp of the first array item.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>					timestamp: i === <span class="hljs-number">0</span> ? v.unix : <span class="hljs-literal">null</span>,
+				}))
+				.value()</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Finally, write to disk.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>			fs.writeJsonSync(<span class="hljs-string">'./output/reports.json'</span>, allData)
+
+		} <span class="hljs-keyword">catch</span> (e) {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>If there was an error during any of the above,
+log the error,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>			<span class="hljs-built_in">console</span>.error(e)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>and exit with error code 1.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>			process.exit(<span class="hljs-number">1</span>)
+
+		}
+
+	}
+
+})</code></pre>
+  </div>
+
+  
+</section>
+
+      
+      
+      <section class="section footer" id="footer">
+        
+        <aside class="comment">
+          <span class="content project-copyright">&copy; Copyright 2017 The Boston Globe.</span>
+        </aside>
+
+        <div class="code">
+          <span class="content page-generation-time">Generated Wed, 08 Feb 2017 00:28:39 GMT</span>
+        </div>
+        
+      </section>
+      
+    </main>
+
+  </body>
+</html>
+
