@@ -26,6 +26,17 @@ download:
 	# Download total snowfall reports for the last 24 hours as a KML file.
 	curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > input/snow.kml;
 
+	# Download a GeoTiff of the forecast (TODO).
+	curl 'http://digital.weather.gov/wms.php?LAYERS=ndfd.conus.totalsnowamt&FORMAT=image%2Ftiff&TRANSPARENT=TRUE&VERSION=1.3.0&VT=2017-02-10T06%3A00&EXCEPTIONS=INIMAGE&SERVICE=WMS&REQUEST=GetMap&STYLES=&CRS=EPSG%3A3857&BBOX=-9517816.46282,3632749.14338,-7458405.88315,6024072.11937&WIDTH=2000&HEIGHT=2000' > input/forecast.tif;
+
+
+
+georeference:
+
+	cd input; \
+		gdal_translate -of GTiff -a_ullr -9517816.46282 6024072.11937 -7458405.88315 3632749.14338 -a_srs EPSG:3857 forecast.tif forecast_3857.tif; \
+		gdalwarp -t_srs "EPSG:4326" forecast_3857.tif forecast_4326.tif
+
 
 
 preprocess:
@@ -56,7 +67,7 @@ presimplify:
 	shp2json output/snowtotals.shp | \
 	ndjson-split 'd.features' | \
 	ndjson-map -r d3 'd.properties.DN = d3.scaleOrdinal().domain([0,64,229,167,11,142,208,247,192,148,169,216]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
-	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", features: []}' \
+	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", name: "allSnowtotals", features: []}' \
 	> output/allSnowtotals.geojson;
 
 	# Use ogr2ogr to validate geometries and remove polygons with no snowfall.
