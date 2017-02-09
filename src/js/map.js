@@ -36,8 +36,8 @@ const startMap = (url) => {
 	const locator = L.Mapzen.locator()
 	locator.addTo(map)
 
-	// Keep track of map location in URL hash.
-	L.Mapzen.hash({ map })
+	// // Keep track of map location in URL hash.
+	// L.Mapzen.hash({ map })
 
 	let scene
 

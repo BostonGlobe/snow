@@ -33,9 +33,8 @@ download:
 
 georeference:
 
-	cd input; \
-		gdal_translate -of GTiff -a_ullr -9517816.46282 6024072.11937 -7458405.88315 3632749.14338 -a_srs EPSG:3857 forecast.tif forecast_3857.tif; \
-		gdalwarp -t_srs "EPSG:4326" forecast_3857.tif forecast_4326.tif
+	gdal_translate -of GTiff -a_ullr -9517816.46282 6024072.11937 -7458405.88315 3632749.14338 -a_srs EPSG:3857 input/forecast.tif output/forecast_3857.tif;
+	gdalwarp -t_srs "EPSG:4326" output/forecast_3857.tif output/forecast_4326.tif;
 
 
 
@@ -54,6 +53,7 @@ polygonize:
 
 	# Convert the GeoTiff into polygons.
 	gdal_polygonize.py output/integered.tif -f "ESRI Shapefile" output/snowtotals.shp;
+	gdal_polygonize.py output/forecast_4326.tif -f "ESRI Shapefile" output/forecast.shp;
 
 
 
@@ -86,10 +86,10 @@ reports:
 	# Parse downloaded XML reports into JSON,
 	# and use csvkit to convert to GeoJSON.
 	npm run reports
-	# cd output; \
-	# 	cat reports.json | \
-	# 	in2csv -f json | \
-	# 	csvjson --lat lat --lon lon > reports.geojson;
+	cd output; \
+		cat reports.json | \
+		in2csv -f json | \
+		csvjson --lat lat --lon lon > reports.geojson;
 
 
 
@@ -117,6 +117,7 @@ input: clean_all download
 
 output:
 	make clean dir=output
+	make georeference
 	make preprocess
 	make polygonize
 	make presimplify
