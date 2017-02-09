@@ -24,7 +24,8 @@ if (document.querySelectorAll('.g-header__share').length) {
 	})
 }
 
-const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
+const url = 'http://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=' + Date.now()
+// const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
 // const url = '/assets/snowtotals.topojson?q=' + Date.now()
 
 startMap(url)
