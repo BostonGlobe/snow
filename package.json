@@ -1,6 +1,6 @@
 {
   "name": "slush-globeapp-project",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "license": "MIT",
   "scripts": {
     "reports": "babel-node src/getReports.js",
