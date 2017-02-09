@@ -73,7 +73,7 @@ presimplify:
 	# Use ogr2ogr to validate geometries and remove polygons with no snowfall.
 	cd output; \
 		ogr2ogr -f "GeoJSON" snowtotals-valid.geojson allSnowtotals.geojson \
-		-dialect sqlite -sql "select ST_MakeValid(geometry) as geometry, * from allSnowtotals where DN > 0"
+		-dialect sqlite -sql "select ST_MakeValid(geometry) as geometry, * from OGRGeoJSON where DN > 0"
 
 	# Use mapshaper to merge polygons of same snowfall value.
 	cd output; \
