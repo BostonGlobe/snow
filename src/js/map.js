@@ -27,6 +27,7 @@ const startMap = (url) => {
 		scene: 'assets/scene.yaml?q=' + pakage.version,
 		minZoom: 2,
 		maxZoom: 10,
+		apiKey: 'mapzen-v3U3y5X',
 	})
 
 	// Set attribution.
