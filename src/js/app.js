@@ -30,9 +30,6 @@ const url = 'https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scrap
 
 startMap(url)
 
-// const jsTime = select('.js-time')
-// jsTime.innerHTML = 'Jan. 8, 5:04 pm'
-
 request.json(url, (error, json) => {
 
 	if (error) {
