@@ -7,16 +7,16 @@ import setPathCookie from './utils/setPathCookie.js'
 import removeMobileHover from './utils/removeMobileHover.js'
 import wireSocialButtons from './utils/wireSocialButtons.js'
 import startMap from './map.js'
-import credits from './credits.js'
+import setupCredits from './credits.js'
 
 removeMobileHover()
 setPathCookie()
-credits()
+setupCredits()
 
-// Add class to html if JS is loaded
+// Add class to html if JS is loaded.
 document.querySelector('html').classList.add('js-is-loaded')
 
-// Wire header social if present
+// Wire header social if present.
 if (document.querySelectorAll('.g-header__share').length) {
 	wireSocialButtons({
 		facebook: '.g-header__share-button--fb',
@@ -24,10 +24,12 @@ if (document.querySelectorAll('.g-header__share').length) {
 	})
 }
 
+// Keep various urls around for testing/debugging purposes.
 const url = 'https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=' + Date.now()
 // const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
 // const url = '/assets/snowtotals.topojson?q=' + Date.now()
 
+// Start the map.
 startMap(url)
 
 request.json(url, (error, json) => {
