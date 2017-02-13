@@ -45,6 +45,45 @@
 </a>
 
 </li>
+<li class="file separator">
+  
+  
+<a href="../src/js/app.js" title="src/js/app.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/js/app.js</span>
+
+</a>
+
+</li>
+  
+<li class="file">
+  
+<a href="../src/js/map.js" title="src/js/map.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/js/map.js</span>
+
+</a>
+
+</li>
+  
+<li class="file">
+  
+<a href="../src/js/timestamp.js" title="src/js/timestamp.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/js/timestamp.js</span>
+
+</a>
+
+</li>
 
                   
                 </ul>
@@ -121,7 +160,28 @@ download:</code></pre>
   
 
   <div class="code">
-    <pre><code>	curl <span class="hljs-string">'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml'</span> &gt; <span class="hljs-keyword">input</span>/snow.kml<span class="hljs-comment">;</span>
+    <pre><code>	curl <span class="hljs-string">'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml'</span> &gt; <span class="hljs-keyword">input</span>/snow.kml<span class="hljs-comment">;</span></code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Download a GeoTiff of the forecast (TODO).</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	curl 'http://digital.weather.gov/wms.php?LAYERS=ndfd.conus.totalsnowamt&amp;FORMAT=image%<span class="hljs-number">2</span>Ftiff&amp;TRANSPARENT=TRUE&amp;VERSION=<span class="hljs-number">1</span>.<span class="hljs-number">3</span>.<span class="hljs-number">0</span>&amp;VT=<span class="hljs-number">2017</span>-<span class="hljs-number">02</span>-<span class="hljs-number">10T06%3A00</span>&amp;EXCEPTIONS=INIMAGE&amp;SERVICE=WMS&amp;REQUEST=GetMap&amp;STYLES=&amp;CRS=EPSG%<span class="hljs-number">3</span>A3857&amp;BBOX=-<span class="hljs-number">9517816</span>.<span class="hljs-number">46282</span>,<span class="hljs-number">3632749</span>.<span class="hljs-number">14338</span>,-<span class="hljs-number">7458405</span>.<span class="hljs-number">88315</span>,<span class="hljs-number">6024072</span>.<span class="hljs-number">11937</span>&amp;WIDTH=<span class="hljs-number">2000</span>&amp;HEIGHT=<span class="hljs-number">2000</span>' &gt; input/forecast.tif<span class="hljs-comment">;</span>
+
+
+
+georeference:
+
+	gdal_translate -of GTiff -a_ullr -<span class="hljs-number">9517816</span>.<span class="hljs-number">46282</span> <span class="hljs-number">6024072</span>.<span class="hljs-number">11937</span> -<span class="hljs-number">7458405</span>.<span class="hljs-number">88315</span> <span class="hljs-number">3632749</span>.<span class="hljs-number">14338</span> -a_srs EPSG:<span class="hljs-number">3857</span> input/forecast.tif output/forecast_3857.tif<span class="hljs-comment">;</span>
+	gdalwarp -t_srs "EPSG:<span class="hljs-number">4326</span>" output/forecast_3857.tif output/forecast_4326.tif<span class="hljs-comment">;</span>
 
 
 
@@ -162,6 +222,7 @@ it wouldn&#39;t work if two different colors added up to the same color.</p>
 
   <div class="code">
     <pre><code>	gdal_polygonize.py <span class="hljs-keyword">output</span>/integered.tif -f <span class="hljs-string">"ESRI Shapefile"</span> <span class="hljs-keyword">output</span>/snowtotals.shp;
+	gdal_polygonize.py <span class="hljs-keyword">output</span>/forecast_4326.tif -f <span class="hljs-string">"ESRI Shapefile"</span> <span class="hljs-keyword">output</span>/forecast.shp;
 
 
 
@@ -186,7 +247,7 @@ and gather up the newline-delimited JSON stream to GeoJSON.</p>
     <pre><code>	shp2json output/snowtotals.shp | \
 	ndjson-<span class="hljs-built_in">split</span> 'd.<span class="hljs-built_in">features</span>' | \
 	ndjson-<span class="hljs-built_in">map</span> -r d3 'd.<span class="hljs-built_in">properties</span>.DN = d3.scaleOrdinal().<span class="hljs-built_in">domain</span>([<span class="hljs-number">0</span>,<span class="hljs-number">64</span>,<span class="hljs-number">229</span>,<span class="hljs-number">167</span>,<span class="hljs-number">11</span>,<span class="hljs-number">142</span>,<span class="hljs-number">208</span>,<span class="hljs-number">247</span>,<span class="hljs-number">192</span>,<span class="hljs-number">148</span>,<span class="hljs-number">169</span>,<span class="hljs-number">216</span>]).<span class="hljs-built_in">range</span>([<span class="hljs-number">0</span>,<span class="hljs-number">0.1</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>,<span class="hljs-number">4</span>,<span class="hljs-number">6</span>,<span class="hljs-number">8</span>,<span class="hljs-number">10</span>,<span class="hljs-number">15</span>,<span class="hljs-number">20</span>,<span class="hljs-number">25</span>,<span class="hljs-number">30</span>])(d.<span class="hljs-built_in">properties</span>.DN), d' | \
-	ndjson-reduce 'p.<span class="hljs-built_in">features</span>.<span class="hljs-built_in">push</span>(d), p' '{type: <span class="hljs-string">"FeatureCollection"</span>, <span class="hljs-built_in">features</span>: []}' \
+	ndjson-reduce 'p.<span class="hljs-built_in">features</span>.<span class="hljs-built_in">push</span>(d), p' '{type: <span class="hljs-string">"FeatureCollection"</span>, name: <span class="hljs-string">"allSnowtotals"</span>, <span class="hljs-built_in">features</span>: []}' \
 	&gt; output/allSnowtotals.geojson;</code></pre>
   </div>
 
@@ -203,7 +264,7 @@ and gather up the newline-delimited JSON stream to GeoJSON.</p>
   <div class="code">
     <pre><code>	<span class="hljs-built_in">cd</span> output; \
 		ogr2ogr <span class="hljs-_">-f</span> <span class="hljs-string">"GeoJSON"</span> snowtotals-valid.geojson allSnowtotals.geojson \
-		-dialect sqlite -sql <span class="hljs-string">"select ST_MakeValid(geometry) as geometry, * from allSnowtotals where DN &gt; 0"</span></code></pre>
+		-dialect sqlite -sql <span class="hljs-string">"select ST_MakeValid(geometry) as geometry, * from OGRGeoJSON where DN &gt; 0"</span></code></pre>
   </div>
 
   
@@ -237,24 +298,15 @@ and use csvkit to convert to GeoJSON.</p>
   
 
   <div class="code">
-    <pre><code>	<span class="hljs-attribute">n</span><span class="hljs-attribute">p</span><span class="hljs-attribute">m</span> <span class="hljs-attribute">r</span><span class="hljs-attribute">u</span><span class="hljs-attribute">n</span> <span class="hljs-attribute">r</span><span class="hljs-attribute">e</span><span class="hljs-attribute">p</span><span class="hljs-attribute">o</span><span class="hljs-attribute">r</span><span class="hljs-attribute">t</span><span class="hljs-attribute">s</span></code></pre>
-  </div>
+    <pre><code>	<span class="hljs-built_in">npm</span> run reports
+	cd output; <span class="hljs-string">\</span>
+		cat reports.json | <span class="hljs-string">\</span>
+		in2csv -f json | <span class="hljs-string">\</span>
+		csvjson --lat lat --lon lon &gt; reports.geojson;
 
-  
-</section>
-<section class="section">
 
-  <aside class="comment">
-    <div class="text markdown"><p>cd output; \
-    cat reports.json | \
-    in2csv -f json | \
-    csvjson --lat lat --lon lon &gt; reports.geojson;</p>
-</div>
-  </aside>
-  
 
-  <div class="code">
-    <pre><code><span class="hljs-symbol">topojsonize:</span></code></pre>
+topojsonize:</code></pre>
   </div>
 
   
@@ -300,6 +352,7 @@ inpu<span class="hljs-variable">t:</span> clean_all download
 
 outpu<span class="hljs-variable">t:</span>
 	<span class="hljs-keyword">make</span> clean dir=output
+	<span class="hljs-keyword">make</span> georeference
 	<span class="hljs-keyword">make</span> preprocess
 	<span class="hljs-keyword">make</span> polygonize
 	<span class="hljs-keyword">make</span> presimplify
@@ -324,7 +377,7 @@ outpu<span class="hljs-variable">t:</span>
         </aside>
 
         <div class="code">
-          <span class="content page-generation-time">Generated Wed, 08 Feb 2017 00:28:39 GMT</span>
+          <span class="content page-generation-time">Generated Mon, 13 Feb 2017 21:28:38 GMT</span>
         </div>
         
       </section>

@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+  <head>
+    <title>src/js/timestamp.js</title>
+    <link rel="stylesheet" href="./../../../public/style.css" />
+    <link rel="icon" type="image/png" href="./../../../public/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./../../../public/jquery.min.js"></script>
+    <script src="./../../../public/script.js"></script>
+  </head>
+  <body class="code">
+    
+    <main id="sections">
+
+      <!-- The header -->
+
+        
+      <section class="section header files-hidden" id="header">
+
+        <aside class="comment">
+
+          <header>
+
+            <div class="file-path">
+              
+              
+              <a id="project-overview" href="./../../.." title="Project Overview">snow<span id="version"></span></a>
+              
+              <div class="files-menu">
+                <span id="filename" title="src/js/timestamp.js">src/js/timestamp.js</span>
+                
+              
+                <ul class="files hidable">
+                  
+                  
+<li class="file">
+  
+<a href="../../../Makefile" title="Makefile">
+    
+<span class="language" style="background-color: #f0f"></span>
+
+
+<span class="filename">Makefile</span>
+
+</a>
+
+</li>
+<li class="file separator">
+  
+  
+<a href="../../getReports.js" title="src/getReports.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/getReports.js</span>
+
+</a>
+
+</li>
+<li class="file separator">
+  
+  
+<a href="../app.js" title="src/js/app.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/js/app.js</span>
+
+</a>
+
+</li>
+  
+<li class="file">
+  
+<a href="../map.js" title="src/js/map.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/js/map.js</span>
+
+</a>
+
+</li>
+
+                  
+                </ul>
+                
+              </div>
+                
+            </div>
+
+            <div class="spacer"></div>
+            
+            
+          </header>
+            
+        </aside>
+
+        
+        <div class="code empty">
+        </div>
+
+      </section>
+
+      <!-- The main code section -->
+      
+      <section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>This module updates the &quot;Last updated&quot; element.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code><span class="hljs-keyword">import</span> * <span class="hljs-keyword">as</span> request <span class="hljs-keyword">from</span> <span class="hljs-string">'d3-request'</span>
+<span class="hljs-keyword">import</span> dateline <span class="hljs-keyword">from</span> <span class="hljs-string">'dateline'</span>
+<span class="hljs-keyword">import</span> _ <span class="hljs-keyword">from</span> <span class="hljs-string">'lodash'</span>
+
+<span class="hljs-keyword">import</span> { select } <span class="hljs-keyword">from</span> <span class="hljs-string">'./utils/dom'</span>
+
+<span class="hljs-keyword">const</span> updateTimestamp = <span class="hljs-function"><span class="hljs-params">url</span> =&gt;</span> {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Request topojson.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	request.json(url, (error, json) =&gt; {
+
+		<span class="hljs-keyword">if</span> (error) {
+
+			<span class="hljs-built_in">console</span>.error(error)
+
+		} <span class="hljs-keyword">else</span> {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Get the DOM element we are going to modify.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>			<span class="hljs-keyword">const</span> jsTime = select(<span class="hljs-string">'.js-time'</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Get the station reports.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>			<span class="hljs-keyword">const</span> reports = _.get(json, <span class="hljs-string">'objects.reports.geometries'</span>, [])</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Get the report timestamps (there should only be one).</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>			<span class="hljs-keyword">const</span> [timestamp] = _(reports)
+				.map(<span class="hljs-string">'properties.timestamp'</span>)
+				.filter()
+				.value()</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>If we have a timestamp,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>			<span class="hljs-keyword">if</span> (timestamp) {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>create a dateline-wrapped date,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>				<span class="hljs-keyword">const</span> wrapped = dateline(<span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>(+timestamp))</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>create the human-readable string,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>				<span class="hljs-keyword">const</span> human = [wrapped.getAPDate(), wrapped.getAPTime()].join(<span class="hljs-string">', '</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>and set its innerHTML and datetime attribute.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>				jsTime.innerHTML = human
+				jsTime.setAttribute(<span class="hljs-string">'datetime'</span>, timestamp)
+
+			}
+
+		}
+
+	})
+
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> updateTimestamp</code></pre>
+  </div>
+
+  
+</section>
+
+      
+      
+      <section class="section footer" id="footer">
+        
+        <aside class="comment">
+          <span class="content project-copyright">&copy; Copyright 2017 The Boston Globe.</span>
+        </aside>
+
+        <div class="code">
+          <span class="content page-generation-time">Generated Mon, 13 Feb 2017 21:28:38 GMT</span>
+        </div>
+        
+      </section>
+      
+    </main>
+
+  </body>
+</html>
+

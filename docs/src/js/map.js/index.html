@@ -1,0 +1,263 @@
+<!doctype html>
+<html>
+  <head>
+    <title>src/js/map.js</title>
+    <link rel="stylesheet" href="./../../../public/style.css" />
+    <link rel="icon" type="image/png" href="./../../../public/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./../../../public/jquery.min.js"></script>
+    <script src="./../../../public/script.js"></script>
+  </head>
+  <body class="code">
+    
+    <main id="sections">
+
+      <!-- The header -->
+
+        
+      <section class="section header files-hidden" id="header">
+
+        <aside class="comment">
+
+          <header>
+
+            <div class="file-path">
+              
+              
+              <a id="project-overview" href="./../../.." title="Project Overview">snow<span id="version"></span></a>
+              
+              <div class="files-menu">
+                <span id="filename" title="src/js/map.js">src/js/map.js</span>
+                
+              
+                <ul class="files hidable">
+                  
+                  
+<li class="file">
+  
+<a href="../../../Makefile" title="Makefile">
+    
+<span class="language" style="background-color: #f0f"></span>
+
+
+<span class="filename">Makefile</span>
+
+</a>
+
+</li>
+<li class="file separator">
+  
+  
+<a href="../../getReports.js" title="src/getReports.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/getReports.js</span>
+
+</a>
+
+</li>
+<li class="file separator">
+  
+  
+<a href="../app.js" title="src/js/app.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/js/app.js</span>
+
+</a>
+
+</li>
+  
+<li class="file">
+  
+<a href="../timestamp.js" title="src/js/timestamp.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/js/timestamp.js</span>
+
+</a>
+
+</li>
+
+                  
+                </ul>
+                
+              </div>
+                
+            </div>
+
+            <div class="spacer"></div>
+            
+            
+          </header>
+            
+        </aside>
+
+        
+        <div class="code empty">
+        </div>
+
+      </section>
+
+      <!-- The main code section -->
+      
+      <section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>This module draws the map.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code><span class="hljs-keyword">import</span> pakage <span class="hljs-keyword">from</span> <span class="hljs-string">'./../../package.json'</span>
+<span class="hljs-keyword">import</span> { select } <span class="hljs-keyword">from</span> <span class="hljs-string">'./utils/dom'</span>
+
+<span class="hljs-keyword">const</span> startMap = <span class="hljs-function"><span class="hljs-params">url</span> =&gt;</span> {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Select DOM map container.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	<span class="hljs-keyword">const</span> mapElement = select(<span class="hljs-string">'.observed-snowfall__map'</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Create Mapzen map in map container.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	<span class="hljs-keyword">const</span> map = L.Mapzen.map(mapElement, {
+		<span class="hljs-attr">center</span>: [<span class="hljs-number">42.2040</span>, <span class="hljs-number">-71.8674</span>],
+		<span class="hljs-attr">zoom</span>: <span class="hljs-number">7</span>,
+		<span class="hljs-attr">scene</span>: <span class="hljs-string">`assets/scene.yaml?q=<span class="hljs-subst">${pakage.version}</span>`</span>,
+		<span class="hljs-attr">minZoom</span>: <span class="hljs-number">2</span>,
+		<span class="hljs-attr">maxZoom</span>: <span class="hljs-number">10</span>,
+		<span class="hljs-attr">apiKey</span>: <span class="hljs-string">'mapzen-v3U3y5X'</span>,
+	})</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Set attribution.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	map.attributionControl.addAttribution(<span class="hljs-string">'&lt;a href="http://www.weather.gov/erh/hydromet"&gt;NWS&lt;/a&gt;'</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Add locator button.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	<span class="hljs-keyword">const</span> locator = L.Mapzen.locator()
+	locator.addTo(map)
+
+	<span class="hljs-keyword">let</span> scene</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Listen to the Tangram layer being loaded on the map,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>	map.on(<span class="hljs-string">'tangramloaded'</span>, e =&gt; {</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>then save scene to variable,</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>		scene = e.tangramLayer.scene</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>and force cache busting.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>		scene.setDataSource(<span class="hljs-string">'_snowtotals'</span>, {
+			<span class="hljs-attr">type</span>: <span class="hljs-string">'TopoJSON'</span>,
+			url,
+		})
+
+	})
+
+}
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> startMap</code></pre>
+  </div>
+
+  
+</section>
+
+      
+      
+      <section class="section footer" id="footer">
+        
+        <aside class="comment">
+          <span class="content project-copyright">&copy; Copyright 2017 The Boston Globe.</span>
+        </aside>
+
+        <div class="code">
+          <span class="content page-generation-time">Generated Mon, 13 Feb 2017 21:28:38 GMT</span>
+        </div>
+        
+      </section>
+      
+    </main>
+
+  </body>
+</html>
+

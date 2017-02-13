@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+  <head>
+    <title>src/js/app.js</title>
+    <link rel="stylesheet" href="./../../../public/style.css" />
+    <link rel="icon" type="image/png" href="./../../../public/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./../../../public/jquery.min.js"></script>
+    <script src="./../../../public/script.js"></script>
+  </head>
+  <body class="code">
+    
+    <main id="sections">
+
+      <!-- The header -->
+
+        
+      <section class="section header files-hidden" id="header">
+
+        <aside class="comment">
+
+          <header>
+
+            <div class="file-path">
+              
+              
+              <a id="project-overview" href="./../../.." title="Project Overview">snow<span id="version"></span></a>
+              
+              <div class="files-menu">
+                <span id="filename" title="src/js/app.js">src/js/app.js</span>
+                
+              
+                <ul class="files hidable">
+                  
+                  
+<li class="file">
+  
+<a href="../../../Makefile" title="Makefile">
+    
+<span class="language" style="background-color: #f0f"></span>
+
+
+<span class="filename">Makefile</span>
+
+</a>
+
+</li>
+<li class="file separator">
+  
+  
+<a href="../../getReports.js" title="src/getReports.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/getReports.js</span>
+
+</a>
+
+</li>
+<li class="file separator">
+  
+  
+<a href="../map.js" title="src/js/map.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/js/map.js</span>
+
+</a>
+
+</li>
+  
+<li class="file">
+  
+<a href="../timestamp.js" title="src/js/timestamp.js">
+    
+<span class="language" style="background-color: #f1e05a">js</span>
+
+
+<span class="filename">src/js/timestamp.js</span>
+
+</a>
+
+</li>
+
+                  
+                </ul>
+                
+              </div>
+                
+            </div>
+
+            <div class="spacer"></div>
+            
+            
+          </header>
+            
+        </aside>
+
+        
+        <div class="code empty">
+        </div>
+
+      </section>
+
+      <!-- The main code section -->
+      
+      <section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>This module sets up all the components.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code><span class="hljs-keyword">import</span> setPathCookie <span class="hljs-keyword">from</span> <span class="hljs-string">'./utils/setPathCookie'</span>
+<span class="hljs-keyword">import</span> removeMobileHover <span class="hljs-keyword">from</span> <span class="hljs-string">'./utils/removeMobileHover'</span>
+<span class="hljs-keyword">import</span> wireSocialButtons <span class="hljs-keyword">from</span> <span class="hljs-string">'./utils/wireSocialButtons'</span>
+<span class="hljs-keyword">import</span> startMap <span class="hljs-keyword">from</span> <span class="hljs-string">'./map'</span>
+<span class="hljs-keyword">import</span> setupCredits <span class="hljs-keyword">from</span> <span class="hljs-string">'./credits'</span>
+<span class="hljs-keyword">import</span> updateTimestamp <span class="hljs-keyword">from</span> <span class="hljs-string">'./timestamp'</span>
+
+removeMobileHover()
+setPathCookie()
+setupCredits()</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Add class to html if JS is loaded.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code><span class="hljs-built_in">document</span>.querySelector(<span class="hljs-string">'html'</span>).classList.add(<span class="hljs-string">'js-is-loaded'</span>)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Wire header social if present.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code><span class="hljs-keyword">if</span> (<span class="hljs-built_in">document</span>.querySelectorAll(<span class="hljs-string">'.g-header__share'</span>).length) {
+	wireSocialButtons({
+		<span class="hljs-attr">facebook</span>: <span class="hljs-string">'.g-header__share-button--fb'</span>,
+		<span class="hljs-attr">twitter</span>: <span class="hljs-string">'.g-header__share-button--tw'</span>,
+	})
+}
+
+<span class="hljs-keyword">const</span> url =
+	<span class="hljs-string">`https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=<span class="hljs-subst">${<span class="hljs-built_in">Date</span>.now()}</span>`</span></code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Start the map.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>startMap(url)</code></pre>
+  </div>
+
+  
+</section>
+<section class="section">
+
+  <aside class="comment">
+    <div class="text markdown"><p>Update timestamp.</p>
+</div>
+  </aside>
+  
+
+  <div class="code">
+    <pre><code>updateTimestamp(url)</code></pre>
+  </div>
+
+  
+</section>
+
+      
+      
+      <section class="section footer" id="footer">
+        
+        <aside class="comment">
+          <span class="content project-copyright">&copy; Copyright 2017 The Boston Globe.</span>
+        </aside>
+
+        <div class="code">
+          <span class="content page-generation-time">Generated Mon, 13 Feb 2017 21:28:38 GMT</span>
+        </div>
+        
+      </section>
+      
+    </main>
+
+  </body>
+</html>
+

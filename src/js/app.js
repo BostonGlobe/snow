@@ -1,13 +1,11 @@
-import * as request from 'd3-request'
-import dateline from 'dateline'
-import _ from 'lodash'
+// This module sets up all the components.
 
-import { select } from './utils/dom.js'
-import setPathCookie from './utils/setPathCookie.js'
-import removeMobileHover from './utils/removeMobileHover.js'
-import wireSocialButtons from './utils/wireSocialButtons.js'
-import startMap from './map.js'
-import setupCredits from './credits.js'
+import setPathCookie from './utils/setPathCookie'
+import removeMobileHover from './utils/removeMobileHover'
+import wireSocialButtons from './utils/wireSocialButtons'
+import startMap from './map'
+import setupCredits from './credits'
+import updateTimestamp from './timestamp'
 
 removeMobileHover()
 setPathCookie()
@@ -24,46 +22,11 @@ if (document.querySelectorAll('.g-header__share').length) {
 	})
 }
 
-// Keep various urls around for testing/debugging purposes.
-const url = 'https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=' + Date.now()
-// const url = 'https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson?q=' + Date.now()
-// const url = '/assets/snowtotals.topojson?q=' + Date.now()
+const url =
+	`https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=${Date.now()}`
 
 // Start the map.
 startMap(url)
 
-request.json(url, (error, json) => {
-
-	if (error) {
-
-		console.error(error)
-
-	} else {
-
-		// Get the DOM element we are going to modify.
-		const jsTime = select('.js-time')
-
-		const reports = _.get(json, 'objects.reports.geometries', [])
-
-		const [timestamp] = _(reports)
-			.map('properties.timestamp')
-			.filter()
-			.value()
-
-		if (timestamp) {
-
-			// Create a dateline-wrapped date.
-			const wrapped = dateline(new Date(+timestamp))
-
-			// Create the human-readable string.
-			const human = [wrapped.getAPDate(), wrapped.getAPTime()].join(', ')
-
-			// Set its innerHTML and datetime attribute.
-			jsTime.innerHTML = human
-			jsTime.setAttribute('datetime', timestamp)
-
-		}
-
-	}
-
-})
+// Update timestamp.
+updateTimestamp(url)

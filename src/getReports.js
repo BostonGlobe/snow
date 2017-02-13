@@ -43,7 +43,8 @@ parseString(xml, (error, result) => {
 					const description = _.get(v, 'description[0]', '')
 
 					// Try to extract snow depth and report time.
-					const parts = description.match(/Snowfall: (.*) inches(.*)Time of Report:<\/b>(.*)<br>\n$/) || []
+					const parts =
+						description.match(/Snowfall: (.*) inches(.*)Time of Report:<\/b>(.*)<br>\n$/) || []
 
 					const [, amount, , datetime] = parts
 

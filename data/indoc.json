@@ -5,6 +5,9 @@
 	"readme": "README.md",
 	"files": [
 		"Makefile",
-		"src/getReports.js"
+		"src/getReports.js",
+		"src/js/app.js",
+		"src/js/map.js",
+		"src/js/timestamp.js"
 	]
 }
