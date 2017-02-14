@@ -26,8 +26,8 @@ download:
 	# Download total snowfall reports for the last 24 hours as a KML file.
 	curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > input/snow.kml;
 
-	# Download a GeoTiff of the forecast (TODO).
-	curl 'http://digital.weather.gov/wms.php?LAYERS=ndfd.conus.totalsnowamt&FORMAT=image%2Ftiff&TRANSPARENT=TRUE&VERSION=1.3.0&VT=2017-02-10T06%3A00&EXCEPTIONS=INIMAGE&SERVICE=WMS&REQUEST=GetMap&STYLES=&CRS=EPSG%3A3857&BBOX=-9517816.46282,3632749.14338,-7458405.88315,6024072.11937&WIDTH=2000&HEIGHT=2000' > input/forecast.tif;
+	# # Download a GeoTiff of the forecast (TODO).
+	# curl 'http://digital.weather.gov/wms.php?LAYERS=ndfd.conus.totalsnowamt&FORMAT=image%2Ftiff&TRANSPARENT=TRUE&VERSION=1.3.0&VT=2017-02-10T06%3A00&EXCEPTIONS=INIMAGE&SERVICE=WMS&REQUEST=GetMap&STYLES=&CRS=EPSG%3A3857&BBOX=-9517816.46282,3632749.14338,-7458405.88315,6024072.11937&WIDTH=2000&HEIGHT=2000' > input/forecast.tif;
 
 
 
@@ -53,7 +53,7 @@ polygonize:
 
 	# Convert the GeoTiff into polygons.
 	gdal_polygonize.py output/integered.tif -f "ESRI Shapefile" output/snowtotals.shp;
-	gdal_polygonize.py output/forecast_4326.tif -f "ESRI Shapefile" output/forecast.shp;
+	# gdal_polygonize.py output/forecast_4326.tif -f "ESRI Shapefile" output/forecast.shp;
 
 
 
@@ -117,7 +117,6 @@ input: clean_all download
 
 output:
 	make clean dir=output
-	make georeference
 	make preprocess
 	make polygonize
 	make presimplify
