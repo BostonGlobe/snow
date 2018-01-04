@@ -19,17 +19,24 @@ clean:
 
 
 download:
-
+	# hour=$(shell date -u +%H);
+	# date=$(shell date -u +%d);
+	# year_month=$(shell date -u +%Y%m);
+	# midnight_noon=$(if $(hour) > 12,12,00);
+	#
+	# echo 'https://www.nohrsc.noaa.gov/snowfall/data/$(year_month)/sfav2_CONUS_24h_$year_month$date$midnight_noon.tif';
+	curl 'https://www.nohrsc.noaa.gov/snowfall/data/201801/sfav2_CONUS_6h_2018010418.tif' > input/snow.tif;
 	# Download a GeoTiff of the last 24 hours of snowfall.
-	curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > input/snow.tif;
-
-	# Download total snowfall reports for the last 24 hours as a KML file.
+	# curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > input/snow.tif;
+	#
+	# # Download total snowfall reports for the last 24 hours as a KML file.
 	curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > input/snow.kml;
 
 	# # Download a GeoTiff of the forecast (TODO).
 	# curl 'http://digital.weather.gov/wms.php?LAYERS=ndfd.conus.totalsnowamt&FORMAT=image%2Ftiff&TRANSPARENT=TRUE&VERSION=1.3.0&VT=2017-02-10T06%3A00&EXCEPTIONS=INIMAGE&SERVICE=WMS&REQUEST=GetMap&STYLES=&CRS=EPSG%3A3857&BBOX=-9517816.46282,3632749.14338,-7458405.88315,6024072.11937&WIDTH=2000&HEIGHT=2000' > input/forecast.tif;
 
-
+convert:
+	gdal_translate -ot UInt16 -of PNG input/snow.tiff output/snow.png
 
 georeference:
 
@@ -52,7 +59,7 @@ preprocess:
 polygonize:
 
 	# Convert the GeoTiff into polygons.
-	gdal_polygonize.py output/integered.tif -f "ESRI Shapefile" output/snowtotals.shp;
+	python ./python/gdal_polygonize.py input/snow.tif -p -f "ESRI Shapefile" output/snowtotals.shp;
 	# gdal_polygonize.py output/forecast_4326.tif -f "ESRI Shapefile" output/forecast.shp;
 
 
@@ -66,18 +73,19 @@ presimplify:
 	# and gather up the newline-delimited JSON stream to GeoJSON.
 	shp2json output/snowtotals.shp | \
 	ndjson-split 'd.features' | \
-	ndjson-map -r d3 'd.properties.DN = d3.scaleOrdinal().domain([0,64,229,167,11,142,208,247,192,148,169,216]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
+	ndjson-map -r d3 'd.properties.DN = d3.scaleQuantile().domain([0,0.1,1,2,4,6,8,10,15,20,25,30]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
+	ndjson-filter 'd.properties.DN > 0' | \
 	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", name: "allSnowtotals", features: []}' \
 	> output/allSnowtotals.geojson;
 
 	# Use ogr2ogr to validate geometries and remove polygons with no snowfall.
-	cd output; \
-		ogr2ogr -f "GeoJSON" snowtotals-valid.geojson allSnowtotals.geojson \
-		-dialect sqlite -sql "select ST_MakeValid(geometry) as geometry, * from OGRGeoJSON where DN > 0"
+	# cd output; \
+	# 	ogr2ogr -f "GeoJSON" snowtotals-valid.geojson allSnowtotals.geojson \
+	# 	-dialect sqlite -sql "select ST_MakeValid(geometry) as geometry, * from OGRGeoJSON where DN > 0"
 
 	# Use mapshaper to merge polygons of same snowfall value.
 	cd output; \
-		mapshaper snowtotals-valid.geojson snap -dissolve DN -o snowtotals.geojson;
+		mapshaper allSnowtotals.geojson snap -dissolve DN -o snowtotals.geojson;
 
 
 
@@ -117,7 +125,7 @@ input: clean_all download
 
 output:
 	make clean dir=output
-	make preprocess
+	# make preprocess
 	make polygonize
 	make presimplify
 	make reports
