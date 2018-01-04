@@ -4,12 +4,12 @@ import setPathCookie from './utils/setPathCookie'
 import removeMobileHover from './utils/removeMobileHover'
 import wireSocialButtons from './utils/wireSocialButtons'
 import startMap from './map'
-import setupCredits from './credits'
-import updateTimestamp from './timestamp'
+// import setupCredits from './credits'
+// import updateTimestamp from './timestamp'
 
 removeMobileHover()
 setPathCookie()
-setupCredits()
+// setupCredits()
 
 // Add class to html if JS is loaded.
 document.querySelector('html').classList.add('js-is-loaded')
@@ -22,11 +22,11 @@ if (document.querySelectorAll('.g-header__share').length) {
 	})
 }
 
-const url =
-	`https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=${Date.now()}`
+// const url =
+// 	`https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=${Date.now()}`
 
 // Start the map.
-startMap(url)
+startMap()
 
 // Update timestamp.
-updateTimestamp(url)
+// updateTimestamp(url)
