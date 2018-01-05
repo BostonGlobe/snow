@@ -9,9 +9,9 @@ const startMap = () => {
 
 
 const mapboxAccessToken = "pk.eyJ1IjoiZ2FicmllbC1mbG9yaXQiLCJhIjoiVldqX21RVSJ9.Udl7GDHMsMh8EcMpxIr2gA";
-const map = L.map('observed-snowfall__map', {scrollWheelZoom: false, tap: false, zoomSnap: 0.1}).setView([42.32, -71.066], 11.8);
+const map = L.map('observed-snowfall__map', {scrollWheelZoom: false, tap: false, zoomSnap: 0.1}).setView([42.281, -71.718], 8.8);
 
-	L.tileLayer('https://api.mapbox.com/styles/v1/gabriel-florit/cjbzasv8vfaj72smqyrnszevr/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2FicmllbC1mbG9yaXQiLCJhIjoiVldqX21RVSJ9.Udl7GDHMsMh8EcMpxIr2gA', {
+	L.tileLayer('https://api.mapbox.com/styles/v1/gabriel-florit/cjc13znc8hpva2sruk24odval/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2FicmllbC1mbG9yaXQiLCJhIjoiVldqX21RVSJ9.Udl7GDHMsMh8EcMpxIr2gA', {
 	    attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
 	    maxZoom: 18,
 	    id: 'mapbox.light',
