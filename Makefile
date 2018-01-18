@@ -19,19 +19,12 @@ clean:
 
 
 download:
-	# hour=$(shell date -u +%H);
-	# date=$(shell date -u +%d);
-	# year_month=$(shell date -u +%Y%m);
-	# midnight_noon=$(if $(hour) > 12,12,00);
-	#
-	# echo 'https://www.nohrsc.noaa.gov/snowfall/data/$(year_month)/sfav2_CONUS_24h_$year_month$date$midnight_noon.tif';
-	curl 'https://www.nohrsc.noaa.gov/snowfall/data/201801/sfav2_CONUS_6h_2018010418.tif' > input/snow.tif;
 	# Download a GeoTiff of the last 24 hours of snowfall.
-	# curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > input/snow.tif;
+	npm run geotiff;
 	#
 	# # Download total snowfall reports for the last 24 hours as a KML file.
 	curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > input/snow.kml;
-
+	#http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-133.4,23.7,-67.0,47.5
 	# # Download a GeoTiff of the forecast (TODO).
 	# curl 'http://digital.weather.gov/wms.php?LAYERS=ndfd.conus.totalsnowamt&FORMAT=image%2Ftiff&TRANSPARENT=TRUE&VERSION=1.3.0&VT=2017-02-10T06%3A00&EXCEPTIONS=INIMAGE&SERVICE=WMS&REQUEST=GetMap&STYLES=&CRS=EPSG%3A3857&BBOX=-9517816.46282,3632749.14338,-7458405.88315,6024072.11937&WIDTH=2000&HEIGHT=2000' > input/forecast.tif;
 
@@ -57,26 +50,32 @@ preprocess:
 
 
 polygonize:
-
 	# Convert the GeoTiff into polygons.
-	python ./python/gdal_polygonize.py input/snow.tif -p -f "ESRI Shapefile" output/snowtotals.shp;
+	for file in $(basename $(notdir $(wildcard input/*.tiff))); do \
+		echo $$file; \
+		python ./python/gdal_polygonize.py input/$$file.tiff -p -f "ESRI Shapefile" output/$$file.shp; \
+	done;
 	# gdal_polygonize.py output/forecast_4326.tif -f "ESRI Shapefile" output/forecast.shp;
-
-
+	# python ./python/gdal_polygonize.py input/snow.tif -p -f "ESRI Shapefile" output/snowtotals.shp;
 
 presimplify:
-
 	# Convert the snowtotals shapefile to GeoJSON,
 	# convert the GeoJSON to newline-delimited JSON,
 	# use d3.scaleOrdinal to convert the original snowfall colors (calculated
 	# above as R+G+B) to a snowfall number (in inches),
 	# and gather up the newline-delimited JSON stream to GeoJSON.
-	shp2json output/snowtotals.shp | \
-	ndjson-split 'd.features' | \
-	ndjson-map -r d3 'd.properties.DN = d3.scaleQuantile().domain([0,0.1,1,2,4,6,8,10,15,20,25,30]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
-	ndjson-filter 'd.properties.DN > 0' | \
-	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", name: "allSnowtotals", features: []}' \
-	> output/allSnowtotals.geojson;
+	for shapefile in $(basename $(notdir $(wildcard output/*.shp))); do \
+		shp2json output/$$shapefile.shp | \
+		ndjson-split 'd.features' | \
+		ndjson-map -r d3 'd.properties.DN = d3.scaleQuantile().domain([0,0.1,1,2,4,6,8,10,15,20,25,30]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
+		ndjson-filter 'd.properties.DN > 0' | \
+		ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", name: "allSnowtotals", features: []}' \
+		> output/$$shapefile.geojson; \
+		cd output; \
+		mapshaper $$shapefile.geojson snap -dissolve DN -o force $$shapefile.geojson; \
+		cd ../; \
+		npm run date -- --filename=$$shapefile; \
+	done;
 
 	# Use ogr2ogr to validate geometries and remove polygons with no snowfall.
 	# cd output; \
@@ -84,8 +83,8 @@ presimplify:
 	# 	-dialect sqlite -sql "select ST_MakeValid(geometry) as geometry, * from OGRGeoJSON where DN > 0"
 
 	# Use mapshaper to merge polygons of same snowfall value.
-	cd output; \
-		mapshaper allSnowtotals.geojson snap -dissolve DN -o snowtotals.geojson;
+	# cd output; \
+	# 	mapshaper allSnowtotals.geojson snap -dissolve DN -o snowtotals.geojson;
 
 
 
@@ -128,9 +127,9 @@ output:
 	# make preprocess
 	make polygonize
 	make presimplify
-	make reports
-	make topojsonize
-	make deploy
+	# make reports
+	# make topojsonize
+	# make deploy
 
 
 
