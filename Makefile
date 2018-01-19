@@ -64,6 +64,7 @@ presimplify:
 	# use d3.scaleOrdinal to convert the original snowfall colors (calculated
 	# above as R+G+B) to a snowfall number (in inches),
 	# and gather up the newline-delimited JSON stream to GeoJSON.
+	# npm run date -- --filename=$$shapefile;
 	for shapefile in $(basename $(notdir $(wildcard output/*.shp))); do \
 		shp2json output/$$shapefile.shp | \
 		ndjson-split 'd.features' | \
@@ -74,7 +75,6 @@ presimplify:
 		cd output; \
 		mapshaper $$shapefile.geojson snap -dissolve DN -o force $$shapefile.geojson; \
 		cd ../; \
-		npm run date -- --filename=$$shapefile; \
 	done;
 
 	# Use ogr2ogr to validate geometries and remove polygons with no snowfall.
@@ -101,10 +101,9 @@ reports:
 
 
 topojsonize:
-
 	# Combine reports and snowfall polygons into one topojson file,
 	# and simplify and quantize them.
-	geo2topo output/reports.geojson output/snowtotals.geojson | \
+	geo2topo $$(ls output/*.geojson) | \
 		toposimplify -s 0.00000001 -f | \
 		topoquantize 10000 \
 		> output/snowtotals.topojson;
@@ -128,8 +127,8 @@ output:
 	make polygonize
 	make presimplify
 	# make reports
-	# make topojsonize
-	# make deploy
+	make topojsonize
+	make deploy
 
 
 
