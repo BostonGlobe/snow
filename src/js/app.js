@@ -3,7 +3,8 @@
 import setPathCookie from './utils/setPathCookie'
 import removeMobileHover from './utils/removeMobileHover'
 import wireSocialButtons from './utils/wireSocialButtons'
-import startMap from './map'
+import getData from './getData'
+import SnowMap from './map'
 import setupCredits from './credits'
 import updateTimestamp from './timestamp'
 
@@ -22,11 +23,11 @@ if (document.querySelectorAll('.g-header__share').length) {
 	})
 }
 
-const url =
-	`https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=${Date.now()}`
+
+// const topojson = getData(url)
 
 // Start the map.
-startMap(url)
+new SnowMap()
 
 // Update timestamp.
-updateTimestamp(url)
+// updateTimestamp(url)
