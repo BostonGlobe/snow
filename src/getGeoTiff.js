@@ -18,7 +18,7 @@ import fs from 'fs'
 const filePrefixes = [
   {
     prefix: 'sfav2_CONUS_6h_',
-    filename: '6h',
+    filename: '6h ',
     interval: 6
   }, {
     prefix: 'sfav2_CONUS_24h_',

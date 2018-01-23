@@ -60,7 +60,7 @@
     "moment-timezone": "^0.5.14",
     "node-fetch": "^1.7.3",
     "promis": "1.1.4",
-    "require-dir": "0.3.0",
+    "require-dir": "0.3.2",
     "rimraf": "^2.5.4",
     "run-sequence": "1.2.1",
     "shelljs": "0.7.0",
