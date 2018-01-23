@@ -20,6 +20,7 @@ clean:
 
 download:
 	# Download a GeoTiff of the last 6 hours, 24 hours, and season totals of snowfall.
+	# TODO: use gdal_calc.py to merge 6hr tiffs into a 24 hour tiff
 	npm run geotiff;
 	# Download total snowfall reports for the last 24 hours as a KML file.
 	curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > input/snow.kml;
