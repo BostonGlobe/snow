@@ -27,10 +27,12 @@ class SnowMap {
 		mapboxgl.accessToken = 'pk.eyJ1IjoiZ2FicmllbC1mbG9yaXQiLCJhIjoiVldqX21RVSJ9.Udl7GDHMsMh8EcMpxIr2gA'
 		const snowMap = new mapboxgl.Map({
 				container: 'snowfall',
-				style: 'mapbox://styles/mapbox/streets-v9',
-				center: [-71.766398, 44.512989],
-				zoom: 4.5
+				style: 'mapbox://styles/mapbox/light-v9',
+				center: [-72.055862, 42.233297],
+				zoom: 7.4
 		})
+		
+		snowMap.addControl(new mapboxgl.NavigationControl())
 
 		this.props = {
 			snowMap
@@ -43,6 +45,8 @@ class SnowMap {
 
 		this.init()
 	}
+
+
 
 	getDateTimeInfo(filename) {
 		const [ type, datetime ] = filename.split('_')
