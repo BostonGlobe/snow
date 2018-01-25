@@ -8,13 +8,18 @@ clean_all:
 
 	make clean dir=input
 	make clean dir=output
-
+	make setup_input
 
 
 clean:
 
 	rm -rf ${dir};
 	mkdir ${dir};
+
+
+
+setup_input:
+	mkdir input/combine_6h
 
 
 
@@ -26,6 +31,19 @@ download:
 	curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > input/snow.kml;
 	# Download a GeoTiff of the forecast (TODO).
 	# curl 'http://digital.weather.gov/wms.php?LAYERS=ndfd.conus.totalsnowamt&FORMAT=image%2Ftiff&TRANSPARENT=TRUE&VERSION=1.3.0&VT=2017-02-10T06%3A00&EXCEPTIONS=INIMAGE&SERVICE=WMS&REQUEST=GetMap&STYLES=&CRS=EPSG%3A3857&BBOX=-9517816.46282,3632749.14338,-7458405.88315,6024072.11937&WIDTH=2000&HEIGHT=2000' > input/forecast.tif;
+
+6h_files := $(wildcard input/combine_6h/*.tiff)
+24h_date := $(subst 6h_, ,$(basename $(notdir $(word 4, $(6h_files)))))
+combine_6h:
+	gdal_calc.py \
+	-A $(word 1, $(6h_files)) \
+	-B $(word 2, $(6h_files)) \
+	-C $(word 3, $(6h_files)) \
+	-D $(word 4, $(6h_files)) \
+	--outfile=input/24h_$(word 1, $(24h_date)).tiff \
+	--calc="A + ((B-A)*((B - A) > 0)) + ((C-B)*((C - B) > 0)) + ((D-C)*((D - C) > 0))";
+
+
 
 polygonize:
 	# Convert the GeoTiffs into polygons.
@@ -81,7 +99,7 @@ deploy:
 
 
 
-input: clean_all download
+input: clean_all download combine_6h
 
 
 

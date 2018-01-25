@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
 import moment from 'moment'
 import fs from 'fs'
+import { isArray } from 'lodash'
 
 /**
  * getGeoTiff
@@ -18,7 +19,7 @@ import fs from 'fs'
 const filePrefixes = [
   {
     prefix: 'sfav2_CONUS_6h_',
-    filename: '6h ',
+    filename: '6h',
     interval: 6
   }, {
     prefix: 'sfav2_CONUS_24h_',
@@ -59,16 +60,18 @@ const getDate = datetime => {
  * @param  {String}     filename prefix of destination filename (6h, 24h, ot total)
  * @return {Object}              object with datasource url string and file stream
  */
-const getDateFiles = (datetime, prefix, filename) => {
+const getDateFiles = (datetime, prefix, filename, directories = ['']) => {
   const { year, month, date, hour } = getDate(datetime)
   const yearMonth = `${year}${month}`
+  // const directoryStr = directory ? `${directory}/`: ''
 
   // Datasource
   const url = `https://www.nohrsc.noaa.gov/snowfall/data/${yearMonth}/${prefix}${yearMonth}${date}${hour}.tif`
   // Destination filename
-  const file = fs.createWriteStream(`input/${filename}_${year}-${month}-${date}-${hour}.tiff`)
+  const files = directories.map(directory =>
+    `input/${directory}${filename}_${year}-${month}-${date}-${hour}.tiff`)
 
-  return { url, file }
+  return { url, files }
 }
 
 /**
@@ -96,21 +99,29 @@ const getHour = (hour, interval = 12) => {
  * @param  {Number}  interval how often data is updated
  * @param  {String}  filename prefix of destination filename (6h, 24h, ot total)
  */
-const fetchFile = (prefix, utc, interval, filename) => {
-  let { url, file } = getDateFiles(utc, prefix, filename)
+const fetchFile = (prefix, utc, interval, filename, directory, backup = true, cb) => {
+  let { url, files } = getDateFiles(utc, prefix, filename, directory)
   console.log(`DOWNLOADING: ${url}`);
   fetch(url)
     .then(res => {
       if(res.ok) {
-        res.body.pipe(file)
-      } else {
-        let { url, file } = getDateFiles(utc.subtract(interval, 'hours'), prefix, filename)
+        files.forEach(file => {
+          const stream = fs.createWriteStream(file)
+          res.body.pipe(stream)
+        })
+        if(cb) cb(prefix, utc, interval, filename)
+      } else if(backup) {
+        let { url, files } = getDateFiles(utc.subtract(interval, 'hours'), prefix, filename, directory)
         console.log('FILE DOESN\'T EXIST');
         console.log(`TRYING: ${url}`);
         fetch(url)
           .then(res => {
             if(res.ok) {
-              res.body.pipe(file)
+              files.forEach(file => {
+                const stream = fs.createWriteStream(file)
+                res.body.pipe(stream)
+              })
+              if(cb) cb(prefix, utc, interval, filename)
             } else {
               console.log('SECONDARY FILE DOESN\'T EXIST EITHER');
             }
@@ -122,13 +133,36 @@ const fetchFile = (prefix, utc, interval, filename) => {
     })
 }
 
+const getPrevious24h = (prefix, utc, interval, filename) => {
+  [1,2,3].forEach(hour => {
+    utc.subtract(interval, 'hours')
+    fetchFile(prefix, utc, interval, filename, ['combine_6h/'], false, () => {})
+  })
+}
+
 // Loop through all the file objects and fetch and download
-filePrefixes.forEach(obj => {
-  const { prefix, interval, filename } = obj
-  const utc = moment.utc()
-  const hour = getHour(utc.hour(), interval)
+// filePrefixes.forEach(obj => {
+//   const { prefix, interval, filename } = obj
+//   const utc = moment.utc()
+//   const hour = getHour(utc.hour(), interval)
+//
+//   utc.hour(hour)
+//
+//   fetchFile(prefix, utc, interval, filename)
+// })
 
-  utc.hour(hour)
+// Get 6hr
+const utc6hr = moment.utc()
+const hour = getHour(utc6hr.hour(), 6)
 
-  fetchFile(prefix, utc, interval, filename)
-})
+utc6hr.hour(hour)
+
+fetchFile('sfav2_CONUS_6h_', utc6hr, 6, '6h', ['', 'combine_6h/'], true, getPrevious24h)
+
+// Get season total
+const utcTotal = moment.utc()
+const hourTotal = getHour(utcTotal.hour(), 12)
+
+utcTotal.hour(hourTotal)
+
+fetchFile('sfav2_CONUS_2017093012_to_', utcTotal, 12, 'total', [''], true)
