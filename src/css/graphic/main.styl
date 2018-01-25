@@ -48,7 +48,7 @@ main
 	min-height 93.5vh
 	.observed-snowfall
 		flex 1 0 auto
-	
+
 
 // Intro
 .intro
@@ -155,7 +155,7 @@ main
 			display none
 			+mq('bp-2')
 				display block
-		
+
 // Updated
 .updated
 	font-size 0.6rem
@@ -165,14 +165,14 @@ main
 	padding 0.25em
 	background-color rgba($primary-color, 0.25)
 	z-index 2000
-	
 
-//buttons	
+
+//buttons
 .snowfall-buttons
 	margin 0 auto 2rem auto
 	display flex
 	border 1px solid #999
-	
+
 .snowfall-buttons button
 	padding 0.9rem
 	font-size 0.9rem
@@ -181,12 +181,15 @@ main
 	margin 0
 	display block
 	transition background-color 0.5s ease
-	&:first-of-type
+	&:disabled
+		background-color #efefef
+		color black
+
+	&:not(:last-of-type)
 		border-right 1px solid #999
-	
+
 .snowfall-buttons button:hover
 	background-color #efefef
-	
+
 .snowfall-buttons button:active
 	background-color #efefef
-

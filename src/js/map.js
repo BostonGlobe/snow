@@ -31,7 +31,7 @@ class SnowMap {
 				center: [-72.055862, 42.233297],
 				zoom: 7.4
 		})
-		
+
 		snowMap.addControl(new mapboxgl.NavigationControl())
 
 		this.props = {
@@ -40,7 +40,7 @@ class SnowMap {
 
 		this.state = {
 			data: [],
-			view: '24h'
+			view: '6h'
 		}
 
 		this.init()
@@ -51,10 +51,22 @@ class SnowMap {
 	getDateTimeInfo(filename) {
 		const [ type, datetime ] = filename.split('_')
 		const lastUpdated = moment.utc(datetime, 'YYYY-MM-DD-HH').local()
+		let order = 0
+
+		switch (type) {
+			case '6h':
+				order = 1
+				break;
+			case '24h':
+				order = 2
+			default:
+				order = 3
+		}
 
 		return {
 			type,
-			lastUpdated
+			lastUpdated,
+			order
 		}
 	}
 
@@ -89,7 +101,7 @@ class SnowMap {
 		this.setLastUpdated()
 	}
 
-	setView(view = '24h') {
+	setView(view = '6h') {
 		const { snowMap } = this.props
 		const { data } = this.state
 		const current = find(data, collection => collection.properties.info.type === view)
@@ -115,7 +127,7 @@ class SnowMap {
 		})
 	}
 
-	setLastUpdated(view = '24h') {
+	setLastUpdated(view = '6h') {
 		const { data } = this.state
 		const current = find(data, collection => collection.properties.info.type === view)
 		const { type, lastUpdated } = current.properties.info
@@ -143,16 +155,44 @@ class SnowMap {
 	}
 
 	setupButtons() {
-		const { data } = this.state
+		const { view, data } = this.state
 		const $container = select('[data-button-container]')
-		const buttons = data.map(collection => {
+		const buttons = data.sort((a,b) => {
+			return a.properties.info.order - b.properties.info.order
+		}).map(collection => {
 			const { type } = collection.properties.info
-			return `<button data-layer="${type}">${type}</button>`
+			return `<button data-layer="${type}">${this.getButtonText(type)}</button>`
 		}).join('\n')
 
 		$container.innerHTML = buttons
 
 		this.buttonEventListener()
+		this.activateButton(view)
+	}
+
+	getButtonText(type) {
+		switch (type) {
+			case '6h':
+				return 'Past 6 hours'
+				break
+			case '24h':
+				return 'Past 24 hours'
+				break
+			default:
+				return 'Season Total'
+
+		}
+	}
+
+	activateButton(layer) {
+		const buttons = selectAll('[data-layer]')
+		const selected = select(`[data-layer="${layer}"]`)
+
+		buttons.forEach(button => {
+			button.removeAttribute('disabled')
+		})
+
+		selected.setAttribute('disabled', true)
 	}
 
 	buttonEventListener() {
@@ -166,6 +206,7 @@ class SnowMap {
 
 				this.removeLayers(view)
 				this.setView(layer)
+				this.activateButton(layer)
 				this.setLastUpdated(layer)
 
 				this.state.view = layer
