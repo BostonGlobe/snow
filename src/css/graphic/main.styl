@@ -113,7 +113,6 @@ main
 // Map
 .observed-snowfall
 	height 55vh
-	@extends $container
 	&__map
 		height 100%
 		width 100%
@@ -193,3 +192,14 @@ main
 
 .snowfall-buttons button:active
 	background-color #efefef
+
+.interactive
+	@extends $container
+
+.attribution
+	display block
+	clearfix()
+	margin-top 0.625rem
+
+	&__text
+		float right

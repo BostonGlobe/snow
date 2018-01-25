@@ -190,9 +190,11 @@ class SnowMap {
 
 		buttons.forEach(button => {
 			button.removeAttribute('disabled')
+			button.removeAttribute('active')
 		})
 
 		selected.setAttribute('disabled', true)
+		selected.setAttribute('active', true)
 	}
 
 	buttonEventListener() {
