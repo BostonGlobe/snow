@@ -161,8 +161,11 @@ fetchFile('sfav2_CONUS_6h_', utc6hr, 6, '6h', ['', 'combine_6h/'], true, getPrev
 
 // Get season total
 const utcTotal = moment.utc()
-const hourTotal = getHour(utcTotal.hour(), 12)
 
-utcTotal.hour(hourTotal)
+if(utcTotal.hour() < 12) {
+  utcTotal.subtract(1, 'days')
+}
+
+utcTotal.hour(12)
 
 fetchFile('sfav2_CONUS_2017093012_to_', utcTotal, 12, 'total', [''], true)
