@@ -5,7 +5,7 @@ import * as topojson from 'topojson-client'
 import * as request from 'd3-request'
 import moment from 'moment'
 import { map, find } from 'lodash'
-import { select, selectAll } from './utils/dom'
+import { select, selectAll, addClass } from './utils/dom'
 
 const url = ENVIRONMENT === 'development' ? (
 	'assets/snowtotals.topojson'
@@ -169,6 +169,7 @@ class SnowMap {
 			return `<button data-layer="${type}">${this.getButtonText(type)}</button>`
 		}).join('\n')
 
+		addClass($container, 'ready')
 		$container.innerHTML = buttons
 
 		this.buttonEventListener()
