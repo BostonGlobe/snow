@@ -13,14 +13,22 @@ const config = {
 			{ test: /\.json$/, loader: 'json-loader' },
 			{ test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
 		]
-	}
+	},
+	plugins: [
+		new webpack.DefinePlugin({
+			ENVIRONMENT: JSON.stringify('development')
+		})
+	]
 }
 
 const prod_config = Object.assign({}, config, {
 	plugins: [
 		new webpack.optimize.UglifyJsPlugin(),
 		new webpack.optimize.OccurenceOrderPlugin(),
-		new webpack.optimize.DedupePlugin()
+		new webpack.optimize.DedupePlugin(),
+		new webpack.DefinePlugin({
+			ENVIRONMENT: JSON.stringify('production')
+		})
 	]
 })
 

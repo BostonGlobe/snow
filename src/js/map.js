@@ -7,7 +7,12 @@ import moment from 'moment'
 import { map, find } from 'lodash'
 import { select, selectAll } from './utils/dom'
 
-const url = 'assets/snowtotals.topojson'
+const url = ENVIRONMENT === 'development' ? (
+	'assets/snowtotals.topojson'
+) : (
+	`https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=${Date.now()}`
+)
+
 const COLORS = [
 	{inches: 0.1, color: '#d8e2ef'},
 	{inches: 1, color: '#bfc9e2'},
