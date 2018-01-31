@@ -107,6 +107,7 @@ const fetchFile = (prefix, utc, interval, filename, directory, backup = true, cb
       if(res.ok) {
         files.forEach(file => {
           const stream = fs.createWriteStream(file)
+          console.log(`OUTPUT: ${file}`);
           res.body.pipe(stream)
         })
         if(cb) cb(prefix, utc, interval, filename)
@@ -119,6 +120,7 @@ const fetchFile = (prefix, utc, interval, filename, directory, backup = true, cb
             if(res.ok) {
               files.forEach(file => {
                 const stream = fs.createWriteStream(file)
+                console.log(`OUTPUT: ${file}`);
                 res.body.pipe(stream)
               })
               if(cb) cb(prefix, utc, interval, filename)
