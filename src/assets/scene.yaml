@@ -4,7 +4,7 @@ sources:
 
     _snowtotals:
       type: TopoJSON
-      url: https://apps.bostonglobe.com/metro/graphics/2016/12/snow-totals/assets/snowtotals.topojson
+      url: https://apps.bostonglobe.com/northeast-snow-totals/assets/snowtotals.topojson
 
 styles:
   custom-labels:
