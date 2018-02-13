@@ -1,8 +1,10 @@
+**/.DS_Store
 node_modules
 dist
 .tmp
 data/copy.json
 src/assets/methode/*.jpg
+src/assets/snowtotals.topojson
 input
 output
 .Rhistory

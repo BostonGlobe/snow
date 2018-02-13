@@ -1,11 +1,11 @@
 {
-	"copy": {
-		"google": {
-			"id": ""
-		},
-		"methode": {
-			"story": []
-		}
-	},
-	"path": "metro/graphics/2016/12/snow-totals"
+  "copy": {
+    "google": {
+      "id": ""
+    },
+    "methode": {
+      "story": []
+    }
+  },
+  "path": "northeast-snow-totals"
 }

@@ -8,7 +8,7 @@ clean_all:
 
 	make clean dir=input
 	make clean dir=output
-
+	make setup_input
 
 
 clean:
@@ -18,73 +18,64 @@ clean:
 
 
 
+setup_input:
+	mkdir input/combine_6h
+
+
+
 download:
-
-	# Download a GeoTiff of the last 24 hours of snowfall.
-	curl 'http://mapserv.wxinfoicebox.com/cgi-bin/mapserv?map=/data/mapserver/mapfiles/eventimage.map&SRS=EPSG%3A4326&SERVICE=WMS&REQUEST=GetMap&VERSION=1.1.1&LAYERS=snow&STYLES=&FORMAT=image%2Ftiff&TRANSPARENT=true&HEIGHT=2000&WIDTH=2000&PERIOD=24&BBOX=-85.5,31.0,-67.0,47.5' > input/snow.tif;
-
+	# Download a GeoTiff of the last 6 hours, 24 hours, and season totals of snowfall.
+	# TODO: use gdal_calc.py to merge 6hr tiffs into a 24 hour tiff
+	npm run geotiff;
 	# Download total snowfall reports for the last 24 hours as a KML file.
 	curl 'http://www.weather.gov//source/erh/hydromet/stormTotalv3_24.point.snow.kml' > input/snow.kml;
-
-	# # Download a GeoTiff of the forecast (TODO).
+	# Download a GeoTiff of the forecast (TODO).
 	# curl 'http://digital.weather.gov/wms.php?LAYERS=ndfd.conus.totalsnowamt&FORMAT=image%2Ftiff&TRANSPARENT=TRUE&VERSION=1.3.0&VT=2017-02-10T06%3A00&EXCEPTIONS=INIMAGE&SERVICE=WMS&REQUEST=GetMap&STYLES=&CRS=EPSG%3A3857&BBOX=-9517816.46282,3632749.14338,-7458405.88315,6024072.11937&WIDTH=2000&HEIGHT=2000' > input/forecast.tif;
 
-
-
-georeference:
-
-	gdal_translate -of GTiff -a_ullr -9517816.46282 6024072.11937 -7458405.88315 3632749.14338 -a_srs EPSG:3857 input/forecast.tif output/forecast_3857.tif;
-	gdalwarp -t_srs "EPSG:4326" output/forecast_3857.tif output/forecast_4326.tif;
-
-
-
-preprocess:
-
-	# Using raster arithmetic, join the RGB bands into one.
-	# This creates a unique color.
-	# Note that this 'hack' works because the R+G+B combination is unique;
-	# it wouldn't work if two different colors added up to the same color.
-	cd input; \
-		gdal_calc.py -A snow.tif -B snow.tif -C snow.tif --A_band=1 --B_band=2 --C_band=3 --outfile=../output/integered.tif --calc="A+B+C"
+6h_files := $(wildcard input/combine_6h/*.tiff)
+24h_date := $(subst 6h_, ,$(basename $(notdir $(word 1, $(wildcard input/6h_*.tiff)))))
+combine_6h:
+	gdal_calc.py \
+	-A $(word 1, $(6h_files)) \
+	-B $(word 2, $(6h_files)) \
+	-C $(word 3, $(6h_files)) \
+	-D $(word 4, $(6h_files)) \
+	--outfile=input/24h_$(word 1, $(24h_date)).tiff \
+	--NoDataValue=0 \
+	--calc="(A*(A >= 0)) + (((B*(B >= 0))-(A*(A >= 0)))*(((B*(B >= 0)) - (A*(A >= 0))) > 0)) + (((C*(C >= 0))-(B*(B >= 0)))*(((C*(C >= 0)) - (B*(B >= 0))) > 0)) + (((D*(D >= 0))-(C*(C >= 0)))*(((D*(D >= 0)) - (C*(C >= 0))) > 0))";
 
 
 
 polygonize:
-
-	# Convert the GeoTiff into polygons.
-	gdal_polygonize.py output/integered.tif -f "ESRI Shapefile" output/snowtotals.shp;
-	# gdal_polygonize.py output/forecast_4326.tif -f "ESRI Shapefile" output/forecast.shp;
-
-
+	# Convert the GeoTiffs into polygons.
+	for file in $(basename $(notdir $(wildcard input/*.tiff))); do \
+		echo $$file; \
+		python ./python/gdal_polygonize.py input/$$file.tiff -p -f "ESRI Shapefile" output/$$file.shp; \
+	done;
 
 presimplify:
-
 	# Convert the snowtotals shapefile to GeoJSON,
 	# convert the GeoJSON to newline-delimited JSON,
 	# use d3.scaleOrdinal to convert the original snowfall colors (calculated
 	# above as R+G+B) to a snowfall number (in inches),
 	# and gather up the newline-delimited JSON stream to GeoJSON.
-	shp2json output/snowtotals.shp | \
-	ndjson-split 'd.features' | \
-	ndjson-map -r d3 'd.properties.DN = d3.scaleOrdinal().domain([0,64,229,167,11,142,208,247,192,148,169,216]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
-	ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", name: "allSnowtotals", features: []}' \
-	> output/allSnowtotals.geojson;
-
-	# Use ogr2ogr to validate geometries and remove polygons with no snowfall.
-	cd output; \
-		ogr2ogr -f "GeoJSON" snowtotals-valid.geojson allSnowtotals.geojson \
-		-dialect sqlite -sql "select ST_MakeValid(geometry) as geometry, * from OGRGeoJSON where DN > 0"
-
 	# Use mapshaper to merge polygons of same snowfall value.
-	cd output; \
-		mapshaper snowtotals-valid.geojson snap -dissolve DN -o snowtotals.geojson;
-
-
+	for shapefile in $(basename $(notdir $(wildcard output/*.shp))); do \
+		shp2json output/$$shapefile.shp | \
+		ndjson-split 'd.features' | \
+		ndjson-map -r d3 'd.properties.DN = d3.scaleQuantile().domain([0,0.1,1,2,4,6,8,10,15,20,25,30]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
+		ndjson-filter 'd.properties.DN > 0' | \
+		ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", name: "allSnowtotals", features: []}' \
+		> output/$$shapefile.geojson; \
+		cd output; \
+		mapshaper $$shapefile.geojson snap -dissolve DN -o force $$shapefile.geojson; \
+		cd ../; \
+	done;
 
 reports:
-
 	# Parse downloaded XML reports into JSON,
 	# and use csvkit to convert to GeoJSON.
+	# TODO: figure out a new datasource for reports
 	npm run reports
 	cd output; \
 		cat reports.json | \
@@ -94,10 +85,9 @@ reports:
 
 
 topojsonize:
-
 	# Combine reports and snowfall polygons into one topojson file,
 	# and simplify and quantize them.
-	geo2topo output/reports.geojson output/snowtotals.geojson | \
+	geo2topo $$(ls output/*.geojson) | \
 		toposimplify -s 0.00000001 -f | \
 		topoquantize 10000 \
 		> output/snowtotals.topojson;
@@ -105,22 +95,21 @@ topojsonize:
 
 
 deploy:
-
 	# Copy final topojson file to src/assets.
 	cp output/snowtotals.topojson src/assets/snowtotals.topojson
 
 
 
-input: clean_all download
+input: clean_all download combine_6h
 
 
 
 output:
 	make clean dir=output
-	make preprocess
+	# make preprocess
 	make polygonize
 	make presimplify
-	make reports
+	# make reports
 	make topojsonize
 	make deploy
 

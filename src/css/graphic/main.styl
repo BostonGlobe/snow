@@ -48,7 +48,7 @@ main
 	min-height 93.5vh
 	.observed-snowfall
 		flex 1 0 auto
-	
+
 
 // Intro
 .intro
@@ -113,7 +113,6 @@ main
 // Map
 .observed-snowfall
 	height 55vh
-	@extends $container
 	&__map
 		height 100%
 		width 100%
@@ -155,7 +154,7 @@ main
 			display none
 			+mq('bp-2')
 				display block
-		
+
 // Updated
 .updated
 	font-size 0.6rem
@@ -165,3 +164,44 @@ main
 	padding 0.25em
 	background-color rgba($primary-color, 0.25)
 	z-index 2000
+
+
+//buttons
+.snowfall-buttons
+	margin 0 auto 2rem auto
+	display flex
+
+	&.ready
+		border 1px solid #999
+
+.snowfall-buttons button
+	padding 0.9rem
+	font-size 0.9rem
+	background-color white
+	border 0
+	margin 0
+	display block
+	transition background-color 0.5s ease
+	&:disabled
+		background-color #efefef
+		color black
+
+	&:not(:last-of-type)
+		border-right 1px solid #999
+
+.snowfall-buttons button:hover
+	background-color #efefef
+
+.snowfall-buttons button:active
+	background-color #efefef
+
+.interactive
+	@extends $container
+
+.attribution
+	display block
+	clearfix()
+	margin-top 0.625rem
+
+	&__text
+		float right
