@@ -13,19 +13,34 @@ const url = ENVIRONMENT === 'development' ? (
 	`https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=${Date.now()}`
 )
 
-const COLORS = [
-	{inches: 0.1, color: '#d8e2ef'},
-	{inches: 1, color: '#bfc9e2'},
-	{inches: 2, color: '#aaadd3'},
-	{inches: 4, color: '#9b92c5'},
-	{inches: 6, color: '#8f74b6'},
-	{inches: 8, color: '#88569f'},
-	{inches: 10, color: '#783d83'},
-	{inches: 15, color: '#612a64'},
-	{inches: 20, color: '#451b44'},
-	{inches: 25, color: '#271225'},
-	{inches: 30, color: '#000'},
-]
+const COLORS = {
+	"total": [
+		{inches: 6, color: '#d8e2ef'},
+		{inches: 12, color: '#bfc9e2'},
+		{inches: 18, color: '#aaadd3'},
+		{inches: 24, color: '#9b92c5'},
+		{inches: 30, color: '#8f74b6'},
+		{inches: 36, color: '#88569f'},
+		{inches: 42, color: '#783d83'},
+		{inches: 48, color: '#612a64'},
+		{inches: 54, color: '#451b44'},
+		{inches: 60, color: '#271225'},
+		{inches: 66, color: '#000'},
+	],
+	"daily": [
+		{inches: 0.1, color: '#d8e2ef'},
+		{inches: 1, color: '#bfc9e2'},
+		{inches: 2, color: '#aaadd3'},
+		{inches: 4, color: '#9b92c5'},
+		{inches: 6, color: '#8f74b6'},
+		{inches: 8, color: '#88569f'},
+		{inches: 10, color: '#783d83'},
+		{inches: 15, color: '#612a64'},
+		{inches: 20, color: '#451b44'},
+		{inches: 25, color: '#271225'},
+		{inches: 30, color: '#000'},
+	]
+}
 
 class SnowMap {
 	constructor() {
@@ -64,6 +79,7 @@ class SnowMap {
 				break;
 			case '24h':
 				order = 2
+				break;
 			default:
 				order = 3
 		}
@@ -90,12 +106,32 @@ class SnowMap {
 					return geojson
 				})
 
-				this.state.data = geoData
+				console.log(this.parseData(geoData));
+
+				this.state.data = this.parseData(geoData)
 
 				this.setupButtons()
 				this.addData()
 			}
 		})
+	}
+
+	parseData(data) {
+		const geoData = data.map(collection => {
+			const { type } = collection.properties.info
+			const whichColor = type === 'total' ? 'total': 'daily'
+			collection.features = collection.features.map(feature => {
+				const { DN } = feature.properties
+				const { color } = find(COLORS[whichColor], colorObj => colorObj.inches === DN)
+				feature.properties.color = color
+
+				return feature
+			}).sort((a,b) => a.properties.DN - b.properties.DN)
+
+			return collection
+		})
+
+		return geoData
 	}
 
 	addData() {
@@ -104,6 +140,7 @@ class SnowMap {
 
 		this.setView()
 		this.setLastUpdated()
+		this.setLegend()
 	}
 
 	setView(view = '6h') {
@@ -114,7 +151,7 @@ class SnowMap {
 
 		sorted.forEach(feature => {
 			const inches = feature.properties.DN
-			const { color } = find(COLORS, colorObj => colorObj.inches === inches)
+			const { color } = feature.properties
 
 			snowMap.addLayer({
 				'id': `${view}_${inches}`,
@@ -130,6 +167,20 @@ class SnowMap {
 				}
 			})
 		})
+	}
+
+	setLegend(view = '6h') {
+		const { data } = this.state
+		const current = find(data, collection => collection.properties.info.type === view)
+		const whichColor = view === 'total' ? 'total': 'daily'
+		const $legend = select('[data-legend]')
+		const inches = selectAll('[data-legend-inches]')
+
+		inches.forEach(($inch, index) => {
+			$inch.innerHTML = COLORS[whichColor][index].inches
+		})
+
+		addClass($legend, 'show')
 	}
 
 	setLastUpdated(view = '6h') {
@@ -216,6 +267,7 @@ class SnowMap {
 				this.setView(layer)
 				this.activateButton(layer)
 				this.setLastUpdated(layer)
+				this.setLegend(layer)
 
 				this.state.view = layer
 			})
