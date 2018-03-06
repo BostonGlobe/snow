@@ -53,6 +53,8 @@ polygonize:
 		python ./python/gdal_polygonize.py input/$$file.tiff -p -f "ESRI Shapefile" output/$$file.shp; \
 	done;
 
+
+shapefiles := $(basename $(notdir $(wildcard output/*.shp)))
 presimplify:
 	# Convert the snowtotals shapefile to GeoJSON,
 	# convert the GeoJSON to newline-delimited JSON,
@@ -60,10 +62,15 @@ presimplify:
 	# above as R+G+B) to a snowfall number (in inches),
 	# and gather up the newline-delimited JSON stream to GeoJSON.
 	# Use mapshaper to merge polygons of same snowfall value.
-	for shapefile in $(basename $(notdir $(wildcard output/*.shp))); do \
+	for shapefile in $(shapefiles); do \
+		if [[ $$shapefile = *"total"* ]]; then \
+			DOMAINRANGE='[0,6,12,18,24,30,36,42,48,54,60,66]'; \
+		else \
+			DOMAINRANGE='[0,0.1,1,2,4,6,8,10,15,20,25,30]'; \
+		fi; \
 		shp2json output/$$shapefile.shp | \
 		ndjson-split 'd.features' | \
-		ndjson-map -r d3 'd.properties.DN = d3.scaleQuantile().domain([0,0.1,1,2,4,6,8,10,15,20,25,30]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
+		ndjson-map -r d3 'd.properties.DN = d3.scaleQuantile().domain('"$$DOMAINRANGE"').range('"$$DOMAINRANGE"')(d.properties.DN), d' | \
 		ndjson-filter 'd.properties.DN > 0' | \
 		ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", name: "allSnowtotals", features: []}' \
 		> output/$$shapefile.geojson; \
