@@ -79,16 +79,6 @@ presimplify:
 		cd ../; \
 	done;
 
-	# shp2json output/$$shapefile.shp | \
-	# ndjson-split 'd.features' | \
-	# ndjson-map -r d3 'd.properties.DN = d3.scaleQuantile().domain([0,0.1,1,2,4,6,8,10,15,20,25,30]).range([0,0.1,1,2,4,6,8,10,15,20,25,30])(d.properties.DN), d' | \
-	# ndjson-filter 'd.properties.DN > 0' | \
-	# ndjson-reduce 'p.features.push(d), p' '{type: "FeatureCollection", name: "allSnowtotals", features: []}' \
-	# > output/$$shapefile.geojson; \
-	# cd output; \
-	# mapshaper $$shapefile.geojson snap -dissolve DN -o force $$shapefile.geojson; \
-	# cd ../; \
-
 reports:
 	# Parse downloaded XML reports into JSON,
 	# and use csvkit to convert to GeoJSON.
