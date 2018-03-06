@@ -106,8 +106,6 @@ class SnowMap {
 					return geojson
 				})
 
-				console.log(this.parseData(geoData));
-
 				this.state.data = this.parseData(geoData)
 
 				this.setupButtons()

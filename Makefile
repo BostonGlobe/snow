@@ -62,7 +62,6 @@ presimplify:
 	# above as R+G+B) to a snowfall number (in inches),
 	# and gather up the newline-delimited JSON stream to GeoJSON.
 	# Use mapshaper to merge polygons of same snowfall value.
-	@echo $(findstring total, $(shapefiles));
 	for shapefile in $(shapefiles); do \
 		if [[ $$shapefile = *"total"* ]]; then \
 			DOMAINRANGE='[0,6,12,18,24,30,36,42,48,54,60,66]'; \
