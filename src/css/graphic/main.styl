@@ -110,6 +110,9 @@ main
 // 			[aria-selected="true"]
 // 				background-color darken($primary-color, 40)
 
+#content
+	padding-bottom 9.375rem
+
 // Map
 .observed-snowfall
 	height 55vh
@@ -119,13 +122,17 @@ main
 
 // Legend
 .legend
-	box-shadow inset 0 7px 9px -7px rgba($offblack, 0.4)
+	box-shadow 0 7px 9px 7px rgba($offblack, 0.4)
 	background-color $offwhite
 	padding 2em
-	display none
+	position fixed
+	bottom -100%
+	width 100%
+	transition bottom 0.25s
+	z-index 99
 
 	&.show
-		display block
+		bottom 0
 
 	&__title
 		font-size 0.8em
