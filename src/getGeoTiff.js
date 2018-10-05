@@ -170,4 +170,4 @@ if(utcTotal.hour() < 12) {
 
 utcTotal.hour(12)
 
-fetchFile('sfav2_CONUS_2017093012_to_', utcTotal, 12, 'total', [''], true)
+fetchFile('sfav2_CONUS_2018093012_to_', utcTotal, 12, 'total', [''], true)

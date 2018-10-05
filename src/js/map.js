@@ -44,15 +44,23 @@ const COLORS = {
 
 class SnowMap {
 	constructor() {
-		mapboxgl.accessToken = 'pk.eyJ1IjoiZ2FicmllbC1mbG9yaXQiLCJhIjoiVldqX21RVSJ9.Udl7GDHMsMh8EcMpxIr2gA'
-		const snowMap = new mapboxgl.Map({
-				container: 'snowfall',
-				style: 'mapbox://styles/mapbox/light-v9',
-				center: [-72.055862, 42.233297],
-				zoom: 7.4
-		})
 
-		snowMap.addControl(new mapboxgl.NavigationControl())
+		const snowMap = L.map('snowfall',{ scrollWheelZoom: false, tap: false, zoomSnap: 0.1 })
+						.setView([42.233297, -72.055862], 7.4)
+		const lightBackground = 'https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}{r}.png'
+
+		snowMap.createPane('labels')
+		snowMap.getPane('labels').style.zIndex = 650
+		snowMap.getPane('labels').style.pointerEvents = 'none'
+
+		const positron = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
+			attribution: '©OpenStreetMap, ©CartoDB'
+		}).addTo(snowMap);
+
+		const positronLabels = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png', {
+			attribution: '©OpenStreetMap, ©CartoDB',
+			pane: 'labels'
+		}).addTo(snowMap);
 
 		this.props = {
 			snowMap
@@ -60,7 +68,8 @@ class SnowMap {
 
 		this.state = {
 			data: [],
-			view: '6h'
+			view: '6h',
+			currentLayer: null
 		}
 
 		this.init()
@@ -147,24 +156,19 @@ class SnowMap {
 		const current = find(data, collection => collection.properties.info.type === view)
 		const sorted = current.features.sort((a,b) => a.properties.DN - b.properties.DN)
 
-		sorted.forEach(feature => {
-			const inches = feature.properties.DN
-			const { color } = feature.properties
-
-			snowMap.addLayer({
-				'id': `${view}_${inches}`,
-				'type': 'fill',
-				'source': {
-					'type': 'geojson',
-					'data': feature
-				},
-				'layout': {},
-				'paint': {
-					'fill-color': color,
-					'fill-opacity': 0.75
-				}
+		const currentLayer = L.geoJSON(sorted, {
+			style: (feature) => ({
+				color: feature.properties.color,
+				fill: true,
+				fillColor: feature.properties.color,
+				fillOpacity: 0.5,
+				weight: 2
 			})
 		})
+
+		currentLayer.addTo(snowMap)
+
+		this.state.currentLayer = currentLayer
 	}
 
 	setLegend(view = '6h') {
@@ -274,15 +278,10 @@ class SnowMap {
 
 	removeLayers(view) {
 		const { snowMap } = this.props
-		const { data } = this.state
+		const { data, currentLayer } = this.state
 		const current = find(data, collection => collection.properties.info.type === view)
 
-		current.features.forEach(feature => {
-			const { DN } = feature.properties
-
-			snowMap.removeLayer(`${view}_${DN}`)
-			snowMap.removeSource(`${view}_${DN}`)
-		})
+		snowMap.removeLayer(currentLayer)
 	}
 
 	init() {
