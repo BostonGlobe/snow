@@ -10,7 +10,7 @@ import { select, selectAll, addClass } from './utils/dom'
 const url = ENVIRONMENT === 'development' ? (
 	'assets/snowtotals.topojson'
 ) : (
-	`https://www.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=${Date.now()}`
+	`https://www3.bostonglobe.com/partners/snowfallscraper/snowfall_scraper.json?q=${Date.now()}`
 )
 
 const COLORS = {
