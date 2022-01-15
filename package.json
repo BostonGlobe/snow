@@ -63,7 +63,7 @@
     "require-dir": "0.3.2",
     "rimraf": "^2.5.4",
     "run-sequence": "1.2.1",
-    "shelljs": "0.8.3",
+    "shelljs": "0.8.5",
     "topojson-client": "^3.0.0",
     "webpack": "1.13.1",
     "webpack-stream": "3.2.0",
